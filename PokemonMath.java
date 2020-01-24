@@ -1,7 +1,27 @@
 
 public class PokemonMath {
 	
-	public double calculateDamage(int level, int attack, int defense, int basePower, int modifier, boolean stabBoolean) {
+	String typings [] = {"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"};
+	double normal [] = {1, 1, 1, 1, 1, .5, 1, 0, .5, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	double fighting [] = {2, 1, .5, .5, 1, 2, .5, 0, 2, 1, 1, 1, 1, .5, 2, 1, 2, .5};
+	double flying [] = {1, 2, 1, 1, 1, .5, 2, 1, .5, 1, 1, 2, .5, 1, 1, 1, 1, 1};
+	double poison [] = {1, 1, 1, .5, .5, .5, 1, .5, 0, 1, 1, 2, 1, 1, 1, 1, 1, 2};
+	double ground [] = {1, 1, 0, 2, 1, 2, .5, 1, 2, 2, 1, .5, 2, 1, 1, 1, 1, 1};
+	double rock [] = {1, .5, 2, 1, .5, 1, 2, 1, .5, 2, 1, 1, 1, 1, 2, 1, 1, 2, .5};
+	double bug [] = {1, .5, .5, .5, 1, 1, 1, .5, .5, .5, 1, 2, 1, 2, 1, 1, 2, .5};
+	double ghost [] = {0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, .5, 1};
+	double steel [] = {1, 1, 1, 1, 1, 2, 1, 1, .5, .5, .5, 1, .5, 1, 2, 1, 1, 2};
+	double fire [] = {1, 1, 1, 1, 1, .5, 2, 1, 2, .5, .5, 2, 1, 1, 2, .5, 1, 1};
+	double water [] = {1, 1, 1, 1, 2, 2, 1, 1, 1, 2, .5, .5, 1, 1, 1, .5, 1, 1};
+	double grass [] = {1, 1, .5, .5, 2, 2, .5, 1, .5, .5, 2, .5, 1, 1, 1, .5, 1, 1};
+	double electric [] = {1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 2, .5, .5, 1, 1, .5, 1, 1};
+	double psychic [] = {1, 2, 1, 2, 1, 1, 1, 1, .5, 1, 1, 1, 1, .5, 1, 1, 0, 1};
+	double ice [] = {1, 1, 2, 1, 2, 1, 1, 1, .5, .5, .5, 2, 1, 1, .5, 2, 1, 1};
+	double dragon [] = {1, 1, 1, 1, 1, 1, 1, 1, .5, 1, 1, 1, 1, 1, 1 ,2, 1, 0};
+	double dark [] = {1, .5, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, .5, .5};
+	double fairy [] = {1, 2, 1, .5, 1, 1, 1, 1, .5, .5, 1, 1, 1, 1, 1, 2, 2, 1};
+	
+	public double calculateDamage(int level, int attack, int defense, int basePower, double modifier, boolean stabBoolean) {
 		double answer = 0;
 		double stab = 1;
 		
@@ -14,4 +34,13 @@ public class PokemonMath {
 		return answer;
 	}
 	
+	public double calculateTypeAdvantage(String aType, String dType1, String dType2) {
+		double answer = 1;
+		
+		
+		
+		return answer;
+	}
+	
 }
+ 
