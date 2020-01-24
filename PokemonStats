@@ -1,23 +1,23 @@
 Venusaur;
 Grass;Poison;
 80;82;83;100;100;80;
-LeechSeed;
-SludgeBomb;
-HiddenPowerFire;
+Leech Seed;
+Sludge Bomb;
+Hidden Power Fire;
 Synthesis;
 
 Blastoise;
 Water;NA;
 79;83;100;85;105;78;
-WaterPulse;
-DarkPulse;
-AuraSphere;
-IceBeam;
+Water Pulse;
+Dark Pulse;
+Aura Sphere;
+Ice Beam;
 
 Charizard;
 Fire;Flying;
 78;84;78;109;85;100;
-DragonDance;
-FlareBlitz;
+Dragon Dance;
+Flare Blitz;
 Earthquake;
 Roost;
