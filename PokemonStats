@@ -1,23 +1,23 @@
 Venusaur;
 Grass;Poison;
 80;82;83;100;100;80;
-Leech Seed;
-Sludge Bomb;
-Hidden Power Fire;
-Synthesis;
+Giga Drain;Grass;75;
+Sludge Bomb;Poison;90;
+Hidden Power Fire;Fire;60;
+Synthesis;Grass;-50;
 
 Blastoise;
 Water;NA;
 79;83;100;85;105;78;
-Water Pulse;
-Dark Pulse;
-Aura Sphere;
-Ice Beam;
+Hydro Pump;Water;110;
+Dark Pulse;Dark;80;
+Aura Sphere;Fighting;80;
+Ice Beam;Ice;90;
 
 Charizard;
 Fire;Flying;
 78;84;78;109;85;100;
-Dragon Dance;
-Flare Blitz;
-Earthquake;
-Roost;
+Dragon Pulse;Dragon;85;
+Flare Blitz;Fire;120;
+Earthquake;Ground;100;
+Roost;Flying;-50;
