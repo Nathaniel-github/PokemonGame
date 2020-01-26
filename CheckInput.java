@@ -100,7 +100,7 @@ public class CheckInput {
 		while (!check) { //Checks to make sure that the input is a String and won't continue to the rest of the code unless it is
 			checker = myobj.next();
 			for (String element : parts) { //Checks the user input against all the possible outputs the code wanted
-	            if (element.equals(checker)) { 
+	            if (element.equalsIgnoreCase(checker)) { 
 	                check = true; 
 	                output = checker;
 	                break; 
