@@ -22,8 +22,8 @@ public class Translator {
 	double fairy[] = { 1, 2, 1, .5, 1, 1, 1, 1, .5, .5, 1, 1, 1, 1, 1, 2, 2, 1 };
 	double typingArray[][] = { normal, fighting, flying, poison, ground, rock, bug, ghost, steel, fire,
 	water, grass, electric, psychic, ice, dragon, dark, fairy };
-	String segments [] = { "Name", "t1", "t2", "HP", "Attack", "Defense", "spA", "spD", "Speed", "m1", "mt1", "bp1", "m2", "mt2", "bp2", "m3", "mt3", "bp3", "m4", "mt4", "bp4" };
-	String names [] = {"Venusaur", "Blastoise", "Charizard"};
+	String segments [] = { "dexNum", "Name", "t1", "t2", "HP", "Attack", "Defense", "spA", "spD", "Speed", "m1", "mt1", "bp1", "m2", "mt2", "bp2", "m3", "mt3", "bp3", "m4", "mt4", "bp4" };
+	ReadWrite kleb = new ReadWrite("PokemonStats");
 	
 	public int getIntForType(String type) {
 		int answer = 0;
@@ -46,11 +46,18 @@ public class Translator {
 		}
 		return answer;
 	}
-
-	public int getDexNumForName(String name) {
+	
+	public int getIntForDexNum(int num) {
 		int answer = 0;
-		for (int i = 0; i < names.length; i++) {
-			if (name.equalsIgnoreCase(names[i])) {
+		String temp[] = kleb.getAllDexNums();
+		for (int i = 0; i < temp.length; i++) {
+			int t = 0;
+			try {
+				t = Integer.parseInt(temp[i]);
+			} catch (Exception e) {
+				return -1;
+			}
+			if (num == t) {
 				answer = i;
 				break;
 			}
