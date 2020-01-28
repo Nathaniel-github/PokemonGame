@@ -8,7 +8,7 @@ public class Main {
 		boolean invalid = true;
 		int dex = 0;
 		while (invalid) {
-			dex = myobj.checkIntRange("Enter the dex number of the pokemon you want (Only fully evolved pokemon are accepted): ", 1, 890);
+			dex = myobj.checkIntRange("Enter the dex number of the pokemon you want (Only fully evolved pokemon from gen 1 are accepted): ", 1, 890);
 			int ndex = myTranslator.getIntForDexNum(dex);
 			if (ndex == -1) { // -1 is the return value if the input value is not an accepted value
 				System.out.println("That was not a valid dex number");

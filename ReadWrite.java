@@ -9,19 +9,21 @@ public class ReadWrite {
 	public String url;
 	File f;
 	String [] dexNums;
+	String[][] file;
 	
 	public ReadWrite(String yooareel) {
 		url = yooareel;
 		f = new File(url);
 		dexNums = new String[890];
+		file = breakApart();
 		for(int i = 0; i < 890; i++) {
-			dexNums[i] = breakApart()[0][i];
+			dexNums[i] = file[0][i];
 		}
 	}
 	
 	protected String[][] breakApart() {
 		try {
-			String[][] file = new String[22][890];
+			file = new String[22][890];
 			Scanner sc = new Scanner(f);
 			String[] currentSegments;
 			int dex = 0;
@@ -45,7 +47,7 @@ public class ReadWrite {
 	
 	
 	public String getPokemonInfo(int segment, int dex) {
-		return breakApart()[segment][dex];
+		return file[segment][dex];
 	}
 	
 	public String[] getAllDexNums() {
