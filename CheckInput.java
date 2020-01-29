@@ -152,7 +152,7 @@ public class CheckInput {
 		boolean containsDigit = false;
 		System.out.println(message);
 		while (!check) { //Checks to make sure that the input is a String and won't continue to the rest of the code unless it is
-			checker = myobj.nextLine();
+			checker = myobj.next();
 			containsDigit = false;
 			for (char c : checker.toCharArray()) {
 				if (Character.isDigit(c)) {
