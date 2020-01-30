@@ -16,4 +16,4 @@ Seeing if I can make a game similar to Pokemon
 
 
 
-nathaniel will not.
+Shut the fuck up kaleb
