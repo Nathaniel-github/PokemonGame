@@ -9,6 +9,7 @@ import java.util.*;
 
 public class CheckInput {
 	Scanner myobj;
+	Typing printer = new Typing();
 	public CheckInput() {
 		myobj = new Scanner(System.in);
 	}
@@ -16,15 +17,15 @@ public class CheckInput {
 	public int getInt(String message) { //Method that checks to make sure that the input is an integer
 		int output = 0;
 		boolean check = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is and integer and won't continue unless it is
 			if (myobj.hasNextInt()) {
 				output = myobj.nextInt();
 				check = true;
 			}
 			else {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
 				myobj.nextLine();
 			}
 		}
@@ -34,7 +35,7 @@ public class CheckInput {
 	public int checkIntRange(String message, int lowPar, int highPar) { //Method that checks to make sure that the input is an integer in a certain range
 		int output = 0;
 		boolean check = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is in a certain range and won't continue unless it is
 			if (myobj.hasNextInt()) {
 				output = myobj.nextInt();
@@ -42,14 +43,36 @@ public class CheckInput {
 					check = true;
 				}
 				else {
-					System.out.println("That wasn't a valid input");
-					System.out.println(message);
+					printer.typeMessage("That wasn't a valid input");
+					printer.typeMessage(message);
 					myobj.nextLine();
 				}
 			}
 			else {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
+				myobj.nextLine();
+			}
+		}
+		return output;
+	}
+	
+	public int checkIntRangeShort(int lowPar, int highPar) { //Method that checks to make sure that the input is an integer in a certain range but doesn't type any message
+		int output = 0;
+		boolean check = false;
+		while (!check) { //Checks to make sure that the input is in a certain range and won't continue unless it is
+			if (myobj.hasNextInt()) {
+				output = myobj.nextInt();
+				if (output >= lowPar && output <= highPar) {
+					check = true;
+				}
+				else {
+					printer.typeMessage("That wasn't a valid input");
+					myobj.nextLine();
+				}
+			}
+			else {
+				printer.typeMessage("That wasn't a valid input");
 				myobj.nextLine();
 			}
 		}
@@ -59,7 +82,7 @@ public class CheckInput {
 	public int getPosInt(String message) { //Method that checks to make sure that the input is a positive integer
 		int output = 0;
 		boolean check = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is in a certain range and won't continue unless it is
 			if (myobj.hasNextInt()) {
 				output = myobj.nextInt();
@@ -67,14 +90,14 @@ public class CheckInput {
 					check = true;
 				}
 				else {
-					System.out.println("That wasn't a valid input");
-					System.out.println(message);
+					printer.typeMessage("That wasn't a valid input");
+					printer.typeMessage(message);
 					myobj.nextLine();
 				}
 			}
 			else {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
 				myobj.nextLine();
 			}
 		}
@@ -96,7 +119,7 @@ public class CheckInput {
 		String checker;
 		String [] parts = desiredOutput.split(" ");
 		boolean check = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is a String and won't continue to the rest of the code unless it is
 			checker = myobj.next();
 			for (String element : parts) { //Checks the user input against all the possible outputs the code wanted
@@ -107,8 +130,8 @@ public class CheckInput {
 	            } 
 	        }
 			if (!check) {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
 			}
 		}
 		return output;
@@ -118,7 +141,7 @@ public class CheckInput {
 		String output = "";
 		String checker;
 		boolean check = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is a String and won't continue to the rest of the code unless it is
 			checker = myobj.next();
 			if (checker.equals("y") || checker.equals("yes") || checker.equals("Yes") || checker.equals("n") || checker.equals("no") || checker.equals("No")) {
@@ -126,8 +149,8 @@ public class CheckInput {
 				output = checker;
 			}
 			else {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
 			}
 		}
 		return output;
@@ -150,7 +173,7 @@ public class CheckInput {
 		String checker = "";
 		boolean check = false;
 		boolean containsDigit = false;
-		System.out.println(message);
+		printer.typeMessage(message);
 		while (!check) { //Checks to make sure that the input is a String and won't continue to the rest of the code unless it is
 			checker = myobj.next();
 			containsDigit = false;
@@ -160,8 +183,8 @@ public class CheckInput {
 				}
 			}
 			if (containsDigit) {
-				System.out.println("That wasn't a valid input");
-				System.out.println(message);
+				printer.typeMessage("That wasn't a valid input");
+				printer.typeMessage(message);
 			}
 			else {
 				check = true;
@@ -173,7 +196,7 @@ public class CheckInput {
 	}
 	
 	public String next(String message) {
-		System.out.println(message);
+		printer.typeMessage(message);
 		String output = myobj.next();
 		return output;
 	}

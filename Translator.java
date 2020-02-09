@@ -22,10 +22,12 @@ public class Translator {
 	double fairy[] = { 1, 2, 1, .5, 1, 1, 1, 1, .5, .5, 1, 1, 1, 1, 1, 2, 2, 1 };
 	double typingArray[][] = { normal, fighting, flying, poison, ground, rock, bug, ghost, steel, fire,
 	water, grass, electric, psychic, ice, dragon, dark, fairy };
-	String segments [] = { "dexNum", "Name", "t1", "t2", "HP", "Attack", "Defense", "spA", "spD", "Speed", "m1", "mt1", "bp1", "m2", "mt2", "bp2", "m3", "mt3", "bp3", "m4", "mt4", "bp4" };
-	ReadWrite kleb = new ReadWrite("PokemonStats");
+	String segments [] = { "dexNumber", "Name", "type1", "type2", "HP", "Attack", "Defense", "specialAttack", "specialDefense", "Speed", "move1", "movetype1", "basepower1", "move2", "movetype2", "basepower2", "move3", "movetype3", "basepower3", "move4", "movetype4", "basepower4" };
+	ReadWrite kleb = new ReadWrite("PokemonStats.txt");
+	//All arrays that are needed for storing values and variables
 	
-	public int getIntForType(String type) {
+	
+	public int getIntForType(String type) { //Basically returns the index of the array which a value from the array belongs to so that you can access the array at that value
 		int answer = 0;
 		for (int i = 0; i < typings.length; i++) {
 			if (type.equalsIgnoreCase(typings[i])) {
@@ -36,7 +38,7 @@ public class Translator {
 		return answer;
 	}
 
-	public int getIntForSegment(String segment) {
+	public int getIntForSegment(String segment) { //Same as previous method except for a different array
 		int answer = 0;
 		for (int i = 0; i < segments.length; i++) {
 			if (segment.equalsIgnoreCase(segments[i])) {
@@ -47,7 +49,7 @@ public class Translator {
 		return answer;
 	}
 	
-	public int getIntForDexNum(int num) {
+	public int getIntForDexNum(int num) { //Same as previous
 		int answer = 0;
 		String temp[] = kleb.getAllDexNums();
 		for (int i = 0; i < temp.length; i++) {
@@ -65,7 +67,7 @@ public class Translator {
 		return answer;
 	}
 	
-	public double getMod(int num1, int num2) {
+	public double getMod(int num1, int num2) { //Returns the modifier based on the 2 integers inputed which represent attacking and defending type
 		double answer = 0;
 		answer = typingArray[num1][num2];
 		return answer;

@@ -14,16 +14,16 @@ public class ReadWrite {
 	public ReadWrite(String yooareel) {
 		url = yooareel;
 		f = new File(url);
-		dexNums = new String[890];
+		dexNums = new String[151];
 		file = breakApart();
-		for(int i = 0; i < 890; i++) {
+		for(int i = 0; i < 151; i++) {
 			dexNums[i] = file[0][i];
 		}
 	}
 	
 	protected String[][] breakApart() {
 		try {
-			file = new String[22][890];
+			file = new String[22][151];
 			Scanner sc = new Scanner(f);
 			String[] currentSegments;
 			int dex = 0;
