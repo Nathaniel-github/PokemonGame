@@ -49,27 +49,17 @@ public class Main {
 						myPrinter.typeMessage("Enter the dex number of the pokemon you want (Only fully evolved pokemon from gen 1 are accepted):");
 						first = false;
 					}
-					dex = myobj.checkIntRange((i + 1) + ": ", 1, 890);
+					dex = myobj.checkIntRange((i + 1) + ": ", 1, 151);
 					dexn = myTranslator.getIntForDexNum(dex);
 					if (dexn == -1) { // -1 is the return value if the input value is not an accepted value
 						myPrinter.typeMessage("That was not a valid dex number");
 					} else {
 						invalid = false;
 					}
-					if (k == 1) {
-						for (int element : p1DexNums) {
-							if (element == dex) {
-								myPrinter.typeMessage("That pokemon was already chosen by you");
-								invalid = true;
-							}
-						}
-					}
-					else {
-						for (int element : p2DexNums) {
-							if (element == dex) {
-								myPrinter.typeMessage("That pokemon was already chosen by you");
-								invalid = true;
-							}
+					for (int element : allDexNums[k]) {
+						if (element == dex) {
+							myPrinter.typeMessage("That pokemon was already chosen by you");
+							invalid = true;
 						}
 					}
 				}
@@ -177,6 +167,7 @@ public class Main {
 					}
 				} 
 			}
+			boolean end = false;
 			for(int i = 1; i <= 2; i++) {
 				if (allMonHP[i][monOutNum[i]] <= 0) {
 					boolean valid = false;
@@ -189,12 +180,21 @@ public class Main {
 						if (allMonHP[i][monOutNum[i]] > 0) {
 							valid = true;
 						}
+						else if (!info.checkWinner(allMonHP, i)) {
+							end = true;
+							break;
+						}
 						else {
 							myPrinter.typeMessage("That pokemon has fainted please select another one");
 						}
 					}
-					monOut[i] = names[i][monOutNum[i]];
-					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
+					if (!end) {
+						monOut[i] = names[i][monOutNum[i]];
+						myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
+					}
+					else {
+						break;
+					}
 				}
 				else {
 					myPrinter.typeMessage(names[i][monOutNum[i]] + " has " + allMonHP[i][monOutNum[i]] + " HP left");
@@ -208,7 +208,9 @@ public class Main {
 					otherP = 1;
 				}
 				battling = info.checkWinner(allMonHP, i);
-				break;
+				if (!battling) {
+					break;
+				}
 			}
 		}
 //		for (int i = 1; i <= 2; i++) {

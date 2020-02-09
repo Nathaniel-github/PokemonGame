@@ -139,10 +139,10 @@ public class PokemonInfo {
 	}
 	
 
-	public double calculateHealing(int pNum, int monOut, int healing) {
+	public double calculateHealing(int pNum, int monOut, double healing) {
 		double answer = 0;
 		int health = Integer.parseInt(allPlayerInfo[pNum][4][monOut]);
-		healing /= -100;
+		healing /= -100.0;
 		answer = health * healing;
 		return answer;
 	}
