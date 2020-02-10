@@ -150,7 +150,7 @@ public class PokemonInfo {
 	public boolean checkWinner(int allHP [][], int pNum) {
 		boolean answer = false;
 		for(int i = 0; i < 6; i++) {
-			if (allHP[pNum][i] != 0) {
+			if (allHP[pNum][i] > 0) {
 				answer = true;
 				break;
 			}

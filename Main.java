@@ -7,8 +7,6 @@ public class Main {
 		PokemonInfo info = new PokemonInfo(); //Holds all current information such as names of selected pokemon, stats, and other values
 		PokemonMath calculator = new PokemonMath(); //Does the math calculations for battle such as attacking and type advantages
 		
-		int [] p1DexNums = new int [6];
-		int [] p2DexNums = new int [6];
 		int [][] allDexNums = new int[3][6];
 		int [][] allMonHP = new int [3][6];
 		int [][] allMonAttack = new int [3][6];
@@ -49,7 +47,7 @@ public class Main {
 						myPrinter.typeMessage("Enter the dex number of the pokemon you want (Only fully evolved pokemon from gen 1 are accepted):");
 						first = false;
 					}
-					dex = myobj.checkIntRange((i + 1) + ": ", 1, 151);
+					dex = myobj.checkIntRange((i + 1) + ": ", 1, 157);
 					dexn = myTranslator.getIntForDexNum(dex);
 					if (dexn == -1) { // -1 is the return value if the input value is not an accepted value
 						myPrinter.typeMessage("That was not a valid dex number");
@@ -113,7 +111,11 @@ public class Main {
 					boolean valid = false;
 					while (!valid) {
 						for (int k = 0; k < 6; k++) {
-							myPrinter.typeMessage((k + 1) + ") " + names[i][k]);
+							String fainted = "";
+							if (allMonHP[i][k] <= 0) {
+								fainted = " ***";
+							}
+							myPrinter.typeMessage((k + 1) + ") " + names[i][k] + fainted);
 						}
 						monOutNum[i] = (myobj.checkIntRange("", 1, 6) - 1);
 						if (allMonHP[i][monOutNum[i]] > 0) {
@@ -167,34 +169,31 @@ public class Main {
 					}
 				} 
 			}
-			boolean end = false;
 			for(int i = 1; i <= 2; i++) {
 				if (allMonHP[i][monOutNum[i]] <= 0) {
 					boolean valid = false;
+					if (!info.checkWinner(allMonHP, i)) {
+						break;
+					}
 					while (!valid) {
 						myPrinter.typeMessage("Player " + i + " which pokemon would you like to send out instead?");
 						for (int k = 0; k < 6; k++) {
-							myPrinter.typeMessage((k + 1) + ") " + names[i][k]);
+							String fainted = "";
+							if (allMonHP[i][k] <= 0) {
+								fainted = " ***";
+							}
+							myPrinter.typeMessage((k + 1) + ") " + names[i][k] + fainted);
 						}
 						monOutNum[i] = (myobj.checkIntRange("", 1, 6) - 1);
 						if (allMonHP[i][monOutNum[i]] > 0) {
 							valid = true;
 						}
-						else if (!info.checkWinner(allMonHP, i)) {
-							end = true;
-							break;
-						}
 						else {
 							myPrinter.typeMessage("That pokemon has fainted please select another one");
 						}
 					}
-					if (!end) {
-						monOut[i] = names[i][monOutNum[i]];
-						myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
-					}
-					else {
-						break;
-					}
+					monOut[i] = names[i][monOutNum[i]];
+					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
 				}
 				else {
 					myPrinter.typeMessage(names[i][monOutNum[i]] + " has " + allMonHP[i][monOutNum[i]] + " HP left");
@@ -209,6 +208,7 @@ public class Main {
 				}
 				battling = info.checkWinner(allMonHP, i);
 				if (!battling) {
+					myPrinter.typeMessage("Player " + otherP + " has won !!");
 					break;
 				}
 			}
