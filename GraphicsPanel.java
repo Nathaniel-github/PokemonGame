@@ -11,10 +11,10 @@ public class GraphicsPanel extends JFrame{
 
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
-	JPanel thing = new JPanel();
+	JPanel animationPanel = new JPanel();
 	JPanel text = new JPanel();
 	JPanel bottomPanel = new JPanel();
-	JTextArea other = new JTextArea();
+	JTextArea textArea = new JTextArea();
 	JTextField response = new JTextField();
 	TextInterface theText;
 	Icon allIcons[][];
@@ -27,14 +27,14 @@ public class GraphicsPanel extends JFrame{
 		mainPanel.setLayout(new GridLayout());
 		bottomPanel.setLayout(new GridLayout());
 		
-		thing.setBorder(new LineBorder(Color.BLACK, 3));
-		thing.setLayout(new GridLayout(0, 2));
+		animationPanel.setBorder(new LineBorder(Color.BLACK, 3));
+		animationPanel.setLayout(new GridLayout(0, 2));
 		
 		
 	    
 //		thing.add(new JLabel("UNDER DEV."));
 		
-		mainPanel.add(thing);
+		mainPanel.add(animationPanel);
 		
 		buttonPanel.setBorder(new LineBorder(Color.BLACK, 3));
 		buttonPanel.setLayout(new FlowLayout(5));
@@ -54,17 +54,17 @@ public class GraphicsPanel extends JFrame{
 		bottomPanel.add(text);
 		
 		
-		other.setWrapStyleWord(true);
-		other.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
 
-		other.setEditable(false);
-		other.setBackground(Color.LIGHT_GRAY);
-		JScrollPane otherPane = new JScrollPane(other, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+		textArea.setEditable(false);
+		textArea.setBackground(Color.LIGHT_GRAY);
+		JScrollPane textAreaPane = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		otherPane.setBorder(new LineBorder(Color.BLACK, 3));
+		textAreaPane.setBorder(new LineBorder(Color.BLACK, 3));
 		
-		mainPanel.add(otherPane);
+		mainPanel.add(textAreaPane);
 		
 		c.add(mainPanel, BorderLayout.CENTER);
 		
@@ -72,14 +72,14 @@ public class GraphicsPanel extends JFrame{
 	}
 	
 	public void writeToScreen(String writing) {
-		String current = other.getText();
-		other.setText(current + writing);
+		String current = textArea.getText();
+		textArea.setText(current + writing);
 	}
 	
 	public void updateAll() {
 		buttonPanel.updateUI();
 		mainPanel.updateUI();
-		thing.updateUI();
+		animationPanel.updateUI();
 		text.updateUI();
 		bottomPanel.updateUI();
 		
@@ -92,7 +92,7 @@ public class GraphicsPanel extends JFrame{
 	
 	public void drawMons(String name1, String name2) {
 		
-		thing.removeAll();
+		animationPanel.removeAll();
 		
 		ImageIcon secImage = new ImageIcon(this.getClass().getResource("SpritesFront/" + name2 + ".gif"));
 		secImage = new ImageIcon(secImage.getImage().getScaledInstance((int)(secImage.getIconWidth() * 1.5), (int)(secImage.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
@@ -105,8 +105,8 @@ public class GraphicsPanel extends JFrame{
 		JLabel label2 = new JLabel(icon2);
 		
 		fillPortions(1);
-		thing.add(label);
-		thing.add(label2);
+		animationPanel.add(label);
+		animationPanel.add(label2);
 		fillPortions(1);
 		
 		updateAll();
@@ -116,7 +116,7 @@ public class GraphicsPanel extends JFrame{
 		JLabel [] labels = new JLabel[x];
 		for (int i = 0; i < x; i ++) {
 			labels[i] = new JLabel();
-			thing.add(labels[i]);
+			animationPanel.add(labels[i]);
 		}
 	}
 
