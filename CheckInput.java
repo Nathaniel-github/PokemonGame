@@ -8,10 +8,11 @@ import java.util.*;
 
 
 public class CheckInput {
-	Scanner myobj;
-	Typing printer = new Typing();
+	TextInterface myobj;
+	Typing printer;
 	public CheckInput() {
-		myobj = new Scanner(System.in);
+		printer = new Typing();
+		
 	}
 	
 	public int getInt(String message) { //Method that checks to make sure that the input is an integer
@@ -26,7 +27,8 @@ public class CheckInput {
 			else {
 				printer.typeMessage("That wasn't a valid input");
 				printer.typeMessage(message);
-				myobj.nextLine();
+				printer.myPanel.writeToScreen(myobj.getBoxText());
+				myobj.moveOn = false;
 			}
 		}
 		return output;
@@ -45,13 +47,14 @@ public class CheckInput {
 				else {
 					printer.typeMessage("That wasn't a valid input");
 					printer.typeMessage(message);
-					myobj.nextLine();
 				}
 			}
 			else {
 				printer.typeMessage("That wasn't a valid input");
 				printer.typeMessage(message);
-				myobj.nextLine();
+				printer.myPanel.writeToScreen(myobj.getBoxText());
+				myobj.moveOn = false;
+				myobj.myTextField.setText("");
 			}
 		}
 		return output;
@@ -68,12 +71,12 @@ public class CheckInput {
 				}
 				else {
 					printer.typeMessage("That wasn't a valid input");
-					myobj.nextLine();
+					
 				}
 			}
 			else {
 				printer.typeMessage("That wasn't a valid input");
-				myobj.nextLine();
+				
 			}
 		}
 		return output;
@@ -92,13 +95,13 @@ public class CheckInput {
 				else {
 					printer.typeMessage("That wasn't a valid input");
 					printer.typeMessage(message);
-					myobj.nextLine();
+					
 				}
 			}
 			else {
 				printer.typeMessage("That wasn't a valid input");
 				printer.typeMessage(message);
-				myobj.nextLine();
+				
 			}
 		}
 		return output;
@@ -106,7 +109,7 @@ public class CheckInput {
 	
 	public boolean checkInt(String input) { //Method that checks to make sure that the input is an integer
 		try {
-			Double.parseDouble(input);
+			Integer.parseInt(input);
 			return true;
 		}
 		catch (NumberFormatException e) {
@@ -199,5 +202,15 @@ public class CheckInput {
 		printer.typeMessage(message);
 		String output = myobj.next();
 		return output;
+	}
+	
+	public void setTyper (Typing type) {
+		printer = type;
+		myobj = new TextInterface (printer.myPanel.response);
+		myobj.setPanel(printer.myPanel);
+	}
+	
+	public TextInterface getTextInterface() {
+		return myobj;
 	}
 }

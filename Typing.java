@@ -1,14 +1,21 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import javax.swing.*;
+import javax.swing.Timer;
 
-public class Typing {
+public class Typing implements ActionListener {
 	
-	int wait = 2;
-	String currentMessage = "";
+	int wait = 4;
+	Timer clock = new Timer(wait, this);
+	Queue <String> currentMessage = new LinkedList <String>();
 	int index = 0;
 	String letters[] = {};
+	int currentPosition = 0;
+	GraphicsPanel myPanel;
+	int numOfMessage = 0;
+	int numOn = 0;
 	
 	public void setWaitTime(int time) { //Useless method
 		wait = time;
@@ -27,17 +34,30 @@ public class Typing {
 	}
 	
 	public void typeMessage(String message) { //Types a message with a cool effect (a pause in between characters printed)
-		currentMessage = message;
-		letters = currentMessage.split("");
-		for (int i = 0; i < letters.length; i++) {
-			System.out.print(letters[i]);
-			try {
-				Thread.sleep(wait);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		currentMessage.add(message);
+		clock.start();
+	}
+	
+	public void setPanel(GraphicsPanel thePanel) {
+		myPanel = thePanel;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		try {
+		letters = currentMessage.peek().split("");
+		if (currentPosition < letters.length) {
+			myPanel.writeToScreen(letters[currentPosition]);
+			currentPosition++;
 		}
-		System.out.println("");
+		else {
+			myPanel.writeToScreen("\n");
+			currentPosition = 0;
+			currentMessage.remove();
+		}
+		} catch(NullPointerException e1) {
+			clock.stop();
+		}
 	}
 	
 }

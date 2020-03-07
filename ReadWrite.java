@@ -53,4 +53,14 @@ public class ReadWrite {
 	public String[] getAllDexNums() {
 		return dexNums;
 	}
+	
+	public String[] getAllNames() {
+		String [] allNames = new String [78];
+		
+		for (int i = 0; i < 78; i ++) {
+			allNames[i] = file[1][i];
+		}
+		
+		return allNames;
+ 	}
 }

@@ -1,3 +1,9 @@
+import java.awt.Image;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class PokemonInfo {
 	Translator myTranslator = new Translator();

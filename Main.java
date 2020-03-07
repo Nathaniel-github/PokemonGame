@@ -1,11 +1,24 @@
+import java.awt.*;
+
+import javax.swing.*;
+
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		CheckInput myobj = new CheckInput(); //My version of the Scanner class which is much better as it doesn't return errors
 		Typing myPrinter = new Typing(); //Class that prints messages with a cool effect
 		Translator myTranslator = new Translator(); //Class that holds most data, most arrays are stored there and are accessed through its methods and get returns of integers which are a "translation" of the input
 		PokemonInfo info = new PokemonInfo(); //Holds all current information such as names of selected pokemon, stats, and other values
 		PokemonMath calculator = new PokemonMath(); //Does the math calculations for battle such as attacking and type advantages
+		
+		GraphicsPanel window = new GraphicsPanel("GUI");
+		window.setBounds(0, 0, 1440, 830);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
+		
+		myPrinter.setPanel(window);
+		myobj.setTyper(myPrinter);
+		window.setTextInterface(myobj.getTextInterface());
 		
 		int [][] allDexNums = new int[3][6];
 		int [][] allMonHP = new int [3][6];
@@ -29,7 +42,6 @@ public class Main {
 		
 		String segments [] = { "dexNumber", "Name", "type1", "type2", "HP", "Attack", "Defense", "specialAttack", "specialDefense", "Speed", "move1", "movetype1", "basepower1", "move2", "movetype2", "basepower2", "move3", "movetype3", "basepower3", "move4", "movetype4", "basepower4" };
 		//Arrays that hold temporary values
-		
 		
 		for (int k = 1; k <= 2; k++) { 
 			for (int i = 0; i < 6; i++) {
@@ -60,6 +72,9 @@ public class Main {
 							invalid = true;
 						}
 					}
+					if (!invalid) {
+						myPrinter.typeMessage("You chose: " + info.getInfo(segments[1], dex) + "!");
+					}
 				}
 				allDexNums[k][i] = dex;
 			}
@@ -89,6 +104,8 @@ public class Main {
 			monOutNum[i] = (myobj.checkIntRange("", 1, 6) - 1);
 			monOut[i] = names[i][monOutNum[i]];
 		}
+		
+		window.drawMons(monOut[1], monOut[2]);
 		
 		for (int i = 1; i <= 2; i++) {
 			myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
@@ -125,6 +142,7 @@ public class Main {
 						}
 					}
 					monOut[i] = names[i][monOutNum[i]];
+					window.drawMons(monOut[1], monOut[2]);
 					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
 				}
 			}
@@ -193,6 +211,7 @@ public class Main {
 						}
 					}
 					monOut[i] = names[i][monOutNum[i]];
+					window.drawMons(monOut[1], monOut[2]);
 					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
 				}
 				else {
