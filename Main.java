@@ -94,6 +94,7 @@ public class Main {
 		allMonSPAttack = info.getAllSPAttack();
 		allMonSPDefense = info.getAllSPDefense();
 		allMonSpeed = info.getAllSpeed();
+		final int [][] startingMonHP = info.getAllHP();
 				
 		for (int i = 1; i <= 2; i++) {
 			myPrinter.typeMessage("Player " + i + " which pokemon would you like to send out?");
@@ -144,6 +145,7 @@ public class Main {
 					monOut[i] = names[i][monOutNum[i]];
 					window.drawMons(monOut[1], monOut[2]);
 					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
+					window.refreshHealthBar(allMonHP[i][monOutNum[i]], startingMonHP[i][monOutNum[i]], i, monOutNum[i]);
 				}
 			}
 			boolean f = true;
@@ -172,18 +174,29 @@ public class Main {
 						String dT2 = info.getDefendType2(monOutNum[otherP], mover);
 						double mod = calculator.calculateTypeAdvantage(aT, dT1, dT2);
 						double damage = calculator.calculateDamage(allMonAttack[mover][monOutNum[mover]], allMonDefense[mover][monOutNum[otherP]], currentDamage[mover], mod, stab);
+						myPrinter.typeMessage(monOut[mover] + " used " + info.getNameForMove(moveSelected[mover], mover, monOutNum[mover]) + "!");
 						allMonHP[otherP][monOutNum[otherP]] -= damage;
+						if (allMonHP[otherP][monOutNum[otherP]] <= 0) {
+							allMonHP[otherP][monOutNum[otherP]] = 0;
+						}
+						window.refreshHealthBar(allMonHP[otherP][monOutNum[otherP]], startingMonHP[otherP][monOutNum[otherP]], otherP, monOutNum[otherP]);
 						if (allMonHP[otherP][monOutNum[otherP]] <= 0) {
 							myPrinter.typeMessage(names[otherP][monOutNum[otherP]] + " has fainted");
 							break;
 						}
+						else {
+							myPrinter.typeMessage(names[otherP][monOutNum[otherP]] + " has " + allMonHP[otherP][monOutNum[otherP]] + " HP left");
+						}
 					}
 					else {
 						double healing = info.calculateHealing(mover, monOutNum[mover], currentDamage[mover]);
+						myPrinter.typeMessage(monOut[mover] + " used " + info.getNameForMove(moveSelected[mover], mover, monOutNum[mover]) + "!");
 						allMonHP[mover][monOutNum[mover]] += healing;
-						if (Integer.parseInt(allInfo[i][4][monOutNum[mover]]) < allMonHP[mover][monOutNum[mover]]) {
-							allMonHP[mover][monOutNum[mover]] = Integer.parseInt(allInfo[i][4][monOutNum[mover]]);
+						if (startingMonHP[mover][monOutNum[mover]] < allMonHP[mover][monOutNum[mover]]) {
+							allMonHP[mover][monOutNum[mover]] = startingMonHP[mover][monOutNum[mover]];
 						}
+						window.refreshHealthBar(allMonHP[mover][monOutNum[mover]], startingMonHP[mover][monOutNum[mover]], mover, monOutNum[mover]);
+						myPrinter.typeMessage(names[mover][monOutNum[mover]] + " has " + allMonHP[mover][monOutNum[mover]] + " HP left");
 					}
 				} 
 			}
@@ -213,9 +226,7 @@ public class Main {
 					monOut[i] = names[i][monOutNum[i]];
 					window.drawMons(monOut[1], monOut[2]);
 					myPrinter.typeMessage("Player " + i + " sent out " + monOut[i] + "!");
-				}
-				else {
-					myPrinter.typeMessage(names[i][monOutNum[i]] + " has " + allMonHP[i][monOutNum[i]] + " HP left");
+					window.refreshHealthBar(allMonHP[i][monOutNum[i]], startingMonHP[i][monOutNum[i]], i, monOutNum[i]);
 				}
 			}
 			for(int i = 1; i <= 2; i++) {

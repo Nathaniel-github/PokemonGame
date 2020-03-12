@@ -132,6 +132,12 @@ public class PokemonInfo {
 		return answer;
 	}
 	
+	public String getNameForMove(int moveSelected, int pNum, int monOut) {
+		String answer = "";
+		answer = allPlayerInfo[pNum][7 + (moveSelected * 3)][monOut];
+		return answer;
+	}
+	
 	public String getDefendType1(int monOut, int pNum) {
 		String answer = "";
 		answer = allPlayerInfo[pNum][2][monOut];
