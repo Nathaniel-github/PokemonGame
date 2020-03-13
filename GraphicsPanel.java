@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -8,28 +9,13 @@ public class GraphicsPanel extends JFrame{
 	JPanel buttonPanel = new JPanel();
 	int startOfRect = 1;
 	int p1MonNum = -1;
+	int waitTime = 20;
 	int p2MonNum = -1;
 	JPanel mainPanel = new JPanel();
 	JPanel animationPanel = new JPanel();
 	JPanel text = new JPanel();
-	JPanel healthBar1 = new JPanel() {
-		public void paintComponent (Graphics g) {
-			g.setColor(Color.GREEN);
-			g.fillRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, (int)((double)health1/total1 * (healthBar1.getWidth() - 1)), 10, 10, 10);
-			
-			g.setColor(Color.BLACK);
-			g.drawRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, healthBar1.getWidth() - 1, 10, 10, 10);
-		}
-	};
-	JPanel healthBar2 = new JPanel() {
-		public void paintComponent (Graphics g) {
-			g.setColor(Color.GREEN);
-			g.fillRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, (int)((double)health1/total1 * (healthBar1.getWidth() - 1)), 10, 10, 10);
-			
-			g.setColor(Color.BLACK);
-			g.drawRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, healthBar1.getWidth() - 1, 10, 10, 10);
-		}
-	};
+	HealthBar healthBar1 = new HealthBar();
+	HealthBar healthBar2 = new HealthBar();
 	JPanel bottomPanel = new JPanel();
 	JTextArea textArea = new JTextArea();
 	JTextField response = new JTextField();
@@ -144,96 +130,33 @@ public class GraphicsPanel extends JFrame{
 		if (pNum == 1) {
 			if (p1MonNum != mon && p1MonNum != -1) {
 				p1MonNum = mon;
+				
 				health1 = health;
 				total1 = total;
-				animationPanel.removeAll();
-				healthBar1 = new JPanel() {
-					public void paintComponent(Graphics g) {
-						g.setColor(Color.GREEN);
-						if ((double)health1/total1 <= .5) {
-							g.setColor(Color.YELLOW);
-						}
-						if ((double)health1/total1 <= .25) {
-							g.setColor(Color.RED);
-						}
-						if (health1 > 0) {
-							g.fillRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, (int)((double)health1/total1 * (healthBar1.getWidth() - 1)), 10, 10, 10);
-						}
-						g.setColor(Color.BLACK);
-						g.drawRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, healthBar1.getWidth() - 1, 10, 10, 10);
-					}
-				};
-				animationPanel.add(healthBar2);
-				animationPanel.add(p2Gif);
-				animationPanel.add(p1Gif);
-				animationPanel.add(healthBar1);
-				updateAll();
+				
+				healthBar1.setHealth(health);
+				healthBar1.setTotal(total);
+				
+				redoHealthPanel();
 			}
 			else {
 				p1MonNum = mon;
-				total1 = total;
+				healthBar1.setTotal(total);;
 				while (health < health1) {
-					animationPanel.removeAll();
-					healthBar1 = new JPanel() {
-						public void paintComponent(Graphics g) {
-							if((double)health1/total1 <= .5) {
-								g.setColor(Color.YELLOW);
-								 if ((double)health1/total1 <= .25) {
-									g.setColor(Color.RED);
-								}
-							} else {
-								g.setColor(Color.GREEN);
-							}
-							
-							if (health1 > 0) {
-								g.fillRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, (int)((double)health1/total1 * (healthBar1.getWidth() - 1)), 10, 10, 10);
-							}
-							
-							g.setColor(Color.BLACK);
-							g.drawRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, healthBar1.getWidth() - 1, 10, 10, 10);
-						}
-					};
-					animationPanel.add(healthBar2);
-					animationPanel.add(p2Gif);
-					animationPanel.add(p1Gif);
-					animationPanel.add(healthBar1);
-					updateAll();
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					
+					healthBar1.setHealth(health1);
+					
+					redoHealthPanel();
+					
 					health1--;
 				}
 			
 				while (health > health1) {
-					animationPanel.removeAll();
-					healthBar1 = new JPanel() {
-						public void paintComponent(Graphics g) {
-							g.setColor(Color.GREEN);
-							if ((double)health1/total1 <= .5) {
-								g.setColor(Color.YELLOW);
-							}
-							if ((double)health1/total1 <= .25) {
-								g.setColor(Color.RED);
-							}
-							if (health1 > 0) {
-								g.fillRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, (int)((double)health1/total1 * (healthBar1.getWidth() - 1)), 10, 10, 10);
-							}
-							g.setColor(Color.BLACK);
-							g.drawRoundRect(startOfRect, healthBar1.getHeight()/2 - 5, healthBar1.getWidth() - 1, 10, 10, 10);
-						}
-					};
-					animationPanel.add(healthBar2);
-					animationPanel.add(p2Gif);
-					animationPanel.add(p1Gif);
-					animationPanel.add(healthBar1);
-					updateAll();
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					
+					healthBar1.setHealth(health1);
+					
+					redoHealthPanel();
+					
 					health1++;
 				}
 			}
@@ -241,101 +164,57 @@ public class GraphicsPanel extends JFrame{
 		else {
 			if (p2MonNum != mon && p2MonNum != -1) {
 				p2MonNum = mon;
+				
 				health2 = health;
 				total2 = total;
-				animationPanel.removeAll();
-				healthBar2 = new JPanel() {
-					public void paintComponent(Graphics g) {
-						g.setColor(Color.GREEN);
-						if ((double)health2/total2 <= .5) {
-							g.setColor(Color.YELLOW);
-						}
-						if ((double)health2/total2 <= .25) {
-							g.setColor(Color.RED);
-						}
-						if (health2 > 0) {
-							g.fillRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, (int)((double)health2/total2 * (healthBar2.getWidth() - 1)), 10, 10, 10);
-							
-						}
-						
-						g.setColor(Color.BLACK);
-						g.drawRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, healthBar2.getWidth() - 1, 10, 10, 10);
-					}
-				};
-				animationPanel.add(healthBar2);
-				animationPanel.add(p2Gif);
-				animationPanel.add(p1Gif);
-				animationPanel.add(healthBar1);
+				
+				healthBar2.setHealth(health);
+				healthBar2.setTotal(total);
+				
+				redoHealthPanel();
+				
 				updateAll();
 			}
 			else {
 				p2MonNum = mon;
-				total2 = total;
+				healthBar2.setTotal(total);
 				while (health < health2) {
-					animationPanel.removeAll();
-					healthBar2 = new JPanel() {
-						public void paintComponent(Graphics g) {
-							g.setColor(Color.GREEN);
-							if ((double)health2/total2 <= .5) {
-								g.setColor(Color.YELLOW);
-							}
-							if ((double)health2/total2 <= .25) {
-								g.setColor(Color.RED);
-							}
-							if (health2 > 0) {
-								g.fillRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, (int)((double)health2/total2 * (healthBar2.getWidth() - 1)), 10, 10, 10);
-								
-							}
-							g.setColor(Color.BLACK);
-							g.drawRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, healthBar2.getWidth() - 1, 10, 10, 10);
-						}
-					};
-					animationPanel.add(healthBar2);
-					animationPanel.add(p2Gif);
-					animationPanel.add(p1Gif);
-					animationPanel.add(healthBar1);
-					updateAll();
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					
+					healthBar2.setHealth(health2);
+					
+					redoHealthPanel();
+					
 					health2--;
 				}
 			
 				while (health > health2) {
-					animationPanel.removeAll();
-					healthBar2 = new JPanel() {
-						public void paintComponent(Graphics g) {
-							g.setColor(Color.GREEN);
-							if ((double)health2/total2 <= .5) {
-								g.setColor(Color.YELLOW);
-							}
-							if ((double)health2/total2 <= .25) {
-								g.setColor(Color.RED);
-							}
-							if (health2 > 0) {
-								g.fillRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, (int)((double)health2/total2 * (healthBar2.getWidth() - 1)), 10, 10, 10);
-							}
-							g.setColor(Color.BLACK);
-							g.drawRoundRect(startOfRect, healthBar2.getHeight()/2 - 5, healthBar2.getWidth() - 1, 10, 10, 10);
-						}
-					};
-					animationPanel.add(healthBar2);
-					animationPanel.add(p2Gif);
-					animationPanel.add(p1Gif);
-					animationPanel.add(healthBar1);
-					updateAll();
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					
+					healthBar2.setHealth(health2);
+					
+					redoHealthPanel();
+					
 					health2++;
 				}
 			}
 		}
 		
+	}
+	
+	public void redoHealthPanel () {
+		animationPanel.removeAll();
+		
+		animationPanel.add(healthBar2);
+		animationPanel.add(p2Gif);
+		animationPanel.add(p1Gif);
+		animationPanel.add(healthBar1);
+		
+		updateAll();
+		
+		try {
+			TimeUnit.MILLISECONDS.sleep(waitTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
