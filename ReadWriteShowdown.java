@@ -31,7 +31,7 @@ public class ReadWriteShowdown {
 		
 		try {
 			
-			Scanner myobj = new Scanner(new File("ShowdownMovesets"));
+			Scanner myobj = new Scanner(new File("ShowdownMovesets.txt"));
 			String line;
 			
 			while (myobj.hasNextLine()) {
@@ -84,7 +84,7 @@ public class ReadWriteShowdown {
 		
 		try {
 			
-			Scanner myobj = new Scanner(new File("ShowdownLearnsets"));
+			Scanner myobj = new Scanner(new File("ShowdownLearnsets.txt"));
 			String line;
 			
 			while(myobj.hasNextLine()) {
@@ -164,7 +164,7 @@ public class ReadWriteShowdown {
 		
 		try {
 			
-			Scanner myobj = new Scanner(new File("ShowdownLearnsets"));
+			Scanner myobj = new Scanner(new File("ShowdownLearnsets.txt"));
 			String line;
 			
 			while(myobj.hasNextLine()) {
