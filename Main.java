@@ -173,7 +173,7 @@ public class Main {
 						String dT1 = info.getDefendType1(monOutNum[otherP], mover);
 						String dT2 = info.getDefendType2(monOutNum[otherP], mover);
 						double mod = calculator.calculateTypeAdvantage(aT, dT1, dT2);
-						double damage = calculator.calculateDamage(allMonAttack[mover][monOutNum[mover]], allMonDefense[mover][monOutNum[otherP]], currentDamage[mover], mod, stab);
+						double damage = calculator.calculateDamage(allMonAttack[mover][monOutNum[mover]], allMonDefense[mover][monOutNum[otherP]], currentDamage[mover], mod, stab, 100);
 						myPrinter.typeMessage(monOut[mover] + " used " + info.getNameForMove(moveSelected[mover], mover, monOutNum[mover]) + "!");
 						allMonHP[otherP][monOutNum[otherP]] -= damage;
 						if (allMonHP[otherP][monOutNum[otherP]] <= 0) {

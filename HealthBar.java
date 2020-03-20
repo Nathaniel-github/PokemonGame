@@ -5,9 +5,14 @@ import javax.swing.*;
 
 public class HealthBar extends JPanel{
 
-	int startOfRect = 1;
+	int startOfRectX = 1;
+	int lengthOfHealth;
+	int startOfRectY;
+	int widthOfRect = 10;
+	int lengthOfRect;
 	int health = 100;
 	int total = 100;
+	
 	
 	public void paintComponent(Graphics g) {
 		if((double)health/total <= .5) {
@@ -18,11 +23,17 @@ public class HealthBar extends JPanel{
 		} else {
 			g.setColor(Color.GREEN);
 		}
-		if (health > 0) {
-			g.fillRoundRect(startOfRect, this.getHeight()/2 - 5, (int)((double)health/total * (this.getWidth() - 1)), 10, 10, 10);
+		
+		lengthOfRect = this.getWidth() - 1;
+		lengthOfHealth = (int)((double)health/total * lengthOfRect);
+		startOfRectY = this.getHeight()/2 - 5;
+		
+		
+		if (health > 1) {
+			g.fillRoundRect(startOfRectX, startOfRectY, lengthOfHealth, widthOfRect, widthOfRect, widthOfRect);
 		}
 		g.setColor(Color.BLACK);
-		g.drawRoundRect(startOfRect, this.getHeight()/2 - 5, this.getWidth() - 1, 10, 10, 10);
+		g.drawRoundRect(startOfRectX, startOfRectY, lengthOfRect, widthOfRect, widthOfRect, widthOfRect);
 	}
 	
 	public void setHealth (int myHealth) {

@@ -44,11 +44,11 @@ public class GraphicsPanel extends JFrame{
 		buttonPanel.setBorder(new LineBorder(Color.BLACK, 3));
 		buttonPanel.setLayout(new FlowLayout(5));
 		buttonPanel.setBackground(Color.GREEN);
-		buttonPanel.add(new JLabel("                 "));
-		buttonPanel.add(new JButton("Testing"));
-		buttonPanel.add(new JButton("Testing"));
-		buttonPanel.add(new JButton("Testing"));
-		buttonPanel.add(new JButton("Testing"));
+//		buttonPanel.add(new JLabel("                 "));
+//		buttonPanel.add(new JButton("Testing"));
+//		buttonPanel.add(new JButton("Testing"));
+//		buttonPanel.add(new JButton("Testing"));
+//		buttonPanel.add(new JButton("Testing"));
 		
 		bottomPanel.add(buttonPanel);
 		
@@ -200,7 +200,7 @@ public class GraphicsPanel extends JFrame{
 		
 	}
 	
-	public void redoHealthPanel () {
+	private void redoHealthPanel () {
 		animationPanel.removeAll();
 		
 		animationPanel.add(healthBar2);

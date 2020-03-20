@@ -55,7 +55,7 @@ public class ReadWrite {
 	}
 	
 	public String[] getAllNames() {
-		String [] allNames = new String [78];
+		String [] allNames = new String [151];
 		
 		for (int i = 0; i < 78; i ++) {
 			allNames[i] = file[1][i];
