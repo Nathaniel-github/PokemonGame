@@ -102,7 +102,13 @@ public class PokemonMath {
 	
 	private double calcNatureBoost(String nature, int base, String stat) {
 		double answer = 1;
-		
+		/*String[] natures = {"Bashful", "attack"};
+		String[] stats = {};
+		for(int i = 0; i < natures.length; i++) {
+			if(nature.equals(natures[i])) {
+				return answer;
+			}
+		}*/
 		if (nature.equals("Bashful") || nature.equals("Docile") || nature.equals("Hardy") || nature.equals("Quirky") || nature.equals("Serious")) {
 			
 			return answer;
