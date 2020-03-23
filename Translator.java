@@ -23,7 +23,7 @@ public class Translator {
 	double typingArray[][] = { normal, fighting, flying, poison, ground, rock, bug, ghost, steel, fire,
 	water, grass, electric, psychic, ice, dragon, dark, fairy };
 	String segments [] = { "dexNumber", "Name", "type1", "type2", "HP", "Attack", "Defense", "specialAttack", "specialDefense", "Speed", "move1", "movetype1", "basepower1", "move2", "movetype2", "basepower2", "move3", "movetype3", "basepower3", "move4", "movetype4", "basepower4" };
-	ReadWrite kleb = new ReadWrite("PokemonStats.txt");
+	ReadWrite kleb = new ReadWrite("StatsTEMP.txt");
 	//All arrays that are needed for storing values and variables
 	
 	

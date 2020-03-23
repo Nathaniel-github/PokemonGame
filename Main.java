@@ -51,16 +51,24 @@ public class Main {
 				while (invalid) { //Tests to make sure the user inputs a dex number that is available and won't exit otherwise
 					if (k == 1 && first) {
 						myPrinter.typeMessage("Player 1: ");
-						myPrinter.typeMessage("Enter the dex number of the pokemon you want (Only fully evolved pokemon from gen 1 are accepted):");
+						myPrinter.typeMessage("Enter the dex number of the pokemon you want:");
 						first = false;
 					}
 					else if (k == 2 && first){
 						myPrinter.typeMessage("Player 2: ");
-						myPrinter.typeMessage("Enter the dex number of the pokemon you want (Only fully evolved pokemon from gen 1 are accepted):");
+						myPrinter.typeMessage("Enter the dex number of the pokemon you want:");
 						first = false;
 					}
-					dex = myobj.checkIntRange((i + 1) + ": ", 1, 157);
+					
+					dex = myobj.checkIntRange((i + 1) + ": ", 1, 802);
 					dexn = myTranslator.getIntForDexNum(dex);
+					int validMon = info.checkValidMon(dexn);
+					
+					if (validMon == -1) {
+						myPrinter.typeMessage("That Pokemon does not have any attacking moves and this program does not currently handle status moves.\nPlease choose another Pokemon.");
+						invalid = true;
+						continue;
+					}
 					if (dexn == -1) { // -1 is the return value if the input value is not an accepted value
 						myPrinter.typeMessage("That was not a valid dex number");
 					} else {
@@ -118,11 +126,22 @@ public class Main {
 				myPrinter.typeMessage("2) Switch Out");
 				option[i] = myobj.checkIntRangeShort(1, 2);
 				if (option[i] == 1) {
-					myPrinter.typeMessage("Player " + i + " please select a move: ");
-					for (int k = 0; k < 4; k++) {
-						myPrinter.typeMessage((k + 1) + ") " + info.getAllMoves(i, monOutNum[i])[k]);
+					boolean valid = false;
+					while (!valid) {
+						valid = true;
+						myPrinter.typeMessage("Player " + i + " please select a move: ");
+						for (int k = 0; k < 4; k++) {
+							myPrinter.typeMessage((k + 1) + ") " + info.getAllMoves(i, monOutNum[i])[k]);
+						}
+						int [] naMoves = info.getAllNAMoves(i, monOutNum[i]);
+						moveSelected[i] = myobj.checkIntRange("", 1, 4);
+						for (int element : naMoves) {
+							if (element == moveSelected[i]) {
+								valid = false;
+								myPrinter.typeMessage("The move selected does not exist, please choose again.");
+							}
+						}
 					}
-					moveSelected[i] = myobj.checkIntRange("", 1, 4);
 				}
 				if (option[i] == 2) {
 					myPrinter.typeMessage("Player " + i + " which pokemon would you like to send out instead?");

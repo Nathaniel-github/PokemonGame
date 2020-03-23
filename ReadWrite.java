@@ -14,16 +14,16 @@ public class ReadWrite {
 	public ReadWrite(String yooareel) {
 		url = yooareel;
 		f = new File(url);
-		dexNums = new String[151];
+		dexNums = new String[802];
 		file = breakApart();
-		for(int i = 0; i < 151; i++) {
+		for(int i = 0; i < file[0].length; i++) {
 			dexNums[i] = file[0][i];
 		}
 	}
 	
 	protected String[][] breakApart() {
 		try {
-			file = new String[22][151];
+			file = new String[22][802];
 			Scanner sc = new Scanner(f);
 			String[] currentSegments;
 			int dex = 0;
@@ -46,8 +46,8 @@ public class ReadWrite {
 	
 	
 	
-	public String getPokemonInfo(int segment, int dex) {
-		return file[segment][dex];
+	public String getPokemonInfo(int segment, int ndex) {
+		return file[segment][ndex];
 	}
 	
 	public String[] getAllDexNums() {
@@ -55,9 +55,9 @@ public class ReadWrite {
 	}
 	
 	public String[] getAllNames() {
-		String [] allNames = new String [151];
+		String [] allNames = new String [802];
 		
-		for (int i = 0; i < 78; i ++) {
+		for (int i = 0; i < allNames.length; i ++) {
 			allNames[i] = file[1][i];
 		}
 		

@@ -215,7 +215,9 @@ public class ReadWriteShowdown {
 					}
 					
 					for (int i = 0; i < 4; i ++) {
-						answer += moves[i];
+						if (moves[i] != null) {
+							answer += moves[i];
+						}
 					}
 					
 					if (moveCount < 4) {

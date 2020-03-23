@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 
 public class PokemonInfo {
 	Translator myTranslator = new Translator();
-	ReadWrite kleb = new ReadWrite("PokemonStats.txt");
+	ReadWrite kleb = new ReadWrite("StatsTEMP.txt");
 	String [][][] allPlayerInfo = {};
 	//Fields
 	
@@ -41,7 +41,47 @@ public class PokemonInfo {
 		String [] answer = new String[4];
 		for (int i = 0; i < 4; i++) {
 			answer [i] = allPlayerInfo[pNum][10 + (3 * i)][ndex];
+			if (answer[i].equalsIgnoreCase("na")) {
+				answer [i] = " ";
+			}
 		}
+		return answer;
+	}
+	
+	public int [] getAllNAMoves(int pNum, int ndex) {
+		int [] answer = new int[4];
+		String [] temp = new String[4];
+		for (int i = 0; i < 4; i++) {
+			temp [i] = allPlayerInfo[pNum][10 + (3 * i)][ndex];
+			if (temp[i].equalsIgnoreCase("na")) {
+				answer [i] = i;
+			}
+		}
+		return answer;
+	}
+	
+	public int checkValidMon(int ndex) {
+		int answer = 0;
+		String [] temp = new String [4];
+		
+		for (int i = 0; i < temp.length; i ++) {
+			temp[i] = kleb.getPokemonInfo(10 + (3 * i), ndex);
+		}
+		
+		int count = 0;
+		
+		for (String element : temp) {
+			
+			if (element.equalsIgnoreCase("na")) {
+				count ++;
+			}
+			
+		}
+		
+		if (count >= 4) {
+			answer = -1;
+		}
+		
 		return answer;
 	}
 	
