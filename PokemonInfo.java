@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 
 public class PokemonInfo {
 	Translator myTranslator = new Translator();
-	ReadWrite kleb = new ReadWrite("StatsTEMP.txt");
+	ReadWrite kleb = new ReadWrite("Stats.txt");
 	String [][][] allPlayerInfo = {};
 	//Fields
 	

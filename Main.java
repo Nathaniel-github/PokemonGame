@@ -10,7 +10,7 @@ public class Main {
 		Translator myTranslator = new Translator(); //Class that holds most data, most arrays are stored there and are accessed through its methods and get returns of integers which are a "translation" of the input
 		PokemonInfo info = new PokemonInfo(); //Holds all current information such as names of selected pokemon, stats, and other values
 		PokemonMath calculator = new PokemonMath(); //Does the math calculations for battle such as attacking and type advantages
-		ReadWrite kleb = new ReadWrite("StatsTEMP.txt");
+		ReadWrite kleb = new ReadWrite("Stats.txt");
 		Downloader myDownloader = new Downloader();
 		
 		GraphicsPanel window = new GraphicsPanel("GUI");
