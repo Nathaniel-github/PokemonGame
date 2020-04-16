@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.*;
 
@@ -13,7 +14,7 @@ public class Main {
 		ReadWrite kleb = new ReadWrite("Stats.txt");
 		Downloader myDownloader = new Downloader();
 		
-		GraphicsPanel window = new GraphicsPanel("GUI");
+		GraphicsPanel window = new GraphicsPanel("Pokemon");
 		window.setBounds(0, 0, 1440, 830);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -55,12 +56,12 @@ public class Main {
 				while (invalid) { //Tests to make sure the user inputs a dex number that is available and won't exit otherwise
 					if (k == 1 && first) {
 						myPrinter.typeMessage("Player 1: ");
-						myPrinter.typeMessage("Enter the dex number of the pokemon you want:");
+						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
 						first = false;
 					}
 					else if (k == 2 && first){
 						myPrinter.typeMessage("Player 2: ");
-						myPrinter.typeMessage("Enter the dex number of the pokemon you want:");
+						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
 						first = false;
 					}
 					
@@ -212,6 +213,10 @@ public class Main {
 						double mod = calculator.calculateTypeAdvantage(aT, dT1, dT2);
 						double damage = calculator.calculateDamage(allMonAttack[mover][monOutNum[mover]], allMonDefense[mover][monOutNum[otherP]], currentDamage[mover], mod, stab, 100);
 						myPrinter.typeMessage(monOut[mover] + " used " + info.getNameForMove(moveSelected[mover], mover, monOutNum[mover]) + "!");
+						if (ThreadLocalRandom.current().nextInt(0, 24) == 0) {
+							damage *= 2;
+							myPrinter.typeMessage("A critical hit!!");
+						}
 						allMonHP[otherP][monOutNum[otherP]] -= damage;
 						if (allMonHP[otherP][monOutNum[otherP]] <= 0) {
 							allMonHP[otherP][monOutNum[otherP]] = 0;

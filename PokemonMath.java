@@ -1,3 +1,4 @@
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PokemonMath {
 
@@ -14,7 +15,7 @@ public class PokemonMath {
 		answer = ((double)(level * 2 + 10) / 250) * ((double)attack / defense) * (double)basePower + 2;
 		answer = answer * modifier * stab;
 		answer /= 4.61538461538;
-		answer = Math.round(answer);
+		answer = Math.round(answer * ThreadLocalRandom.current().nextDouble(0.85, 1.01));
 		return answer;
 	}
 

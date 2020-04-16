@@ -1,21 +1,20 @@
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTextField;
 
-public class TextInterface {
+public class TextInterface{
 
 	JTextField myTextField;
 	boolean moveOn = false;
 	GraphicsPanel myPanel;
-	Action action = new AbstractAction()
-	{
-	    @Override
-	    public void actionPerformed(ActionEvent e)
-	    {
-	        moveOn = true;
-	    }
+	AbstractAction action = new AbstractAction() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			moveOn = true;
+		}
 	};
 	
 	public TextInterface(JTextField getThisText) {
@@ -97,5 +96,6 @@ public class TextInterface {
 	public void setPanel(GraphicsPanel thePanel) {
 		myPanel = thePanel;
 	}
-	
+
+
 }

@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,6 +15,10 @@ public class ReadWriteShowdown {
 	File f;
 	String file;
 	FileWriter myWriter;
+	String [] allMoves = new String[402];
+	String [] allDamage = new String[402];
+	String [] allMoveTypes = new String[402];
+	HashMap <String, String[]> taggedLearnsets = new HashMap <String, String[]>();
 	
 	public ReadWriteShowdown(String readURL, String writeURL, boolean overwrite) {
 		url = readURL;
@@ -22,6 +28,145 @@ public class ReadWriteShowdown {
 			myWriter = new FileWriter(new File(writeURL), !overwrite);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+	}
+	
+	public ReadWriteShowdown() {
+		
+		setAllMoves();
+		setAllLearnsets();
+		
+	}
+	
+	public HashMap <String, String[]> getAllTaggedLearnsets() {
+		
+		return taggedLearnsets;
+		
+	}
+	
+	public String [] getAllMoves() {
+		
+		return allMoves;
+		
+	}
+	
+	public void writeAllMoves() {
+		
+		try {
+			
+			FileWriter writer = new FileWriter(new File("AllMoves.txt"));
+			
+			for (int i = 0; i < allMoves.length; i ++) {
+				
+				writer.write(allMoves[i] + ";" + allMoveTypes[i] + ";" + allDamage[i] + ";\n");
+				writer.flush();
+				
+			}
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	public void writeAllLearnsets() {
+
+		ReadWrite kleb = new ReadWrite("Stats.txt");
+		String [] allNames = kleb.getAllNames();
+	
+		try {
+			
+			FileWriter writer = new FileWriter(new File("Learnsets.txt"));
+			
+			for (int k = 0; k < taggedLearnsets.size(); k ++) {
+				
+				writer.write(allNames[k] + ";");
+
+				writer.flush();
+				
+				for (int i = 0; i < taggedLearnsets.get(allNames[k]).length; i ++) {
+					
+					if (taggedLearnsets.get(allNames[k])[i] == null) {
+						
+						break;
+						
+					}
+					writer.write(taggedLearnsets.get(allNames[k])[i] + ";");
+
+					writer.flush();
+				}
+				
+				writer.write("\n");
+
+				writer.flush();
+				
+			}
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	private void setAllLearnsets() {
+		
+		try {
+			
+			Scanner myobj = new Scanner(new File("Learnsets.txt"));
+			String line = "";
+
+			
+			while (myobj.hasNextLine()) {
+				line = myobj.nextLine();
+				String temp[] = new String [line.split(";").length - 1];
+				String temp2[] = line.split(";");
+				
+				for (int i = 1; i < temp2.length; i ++) {
+					
+					temp[i-1] = temp2[i];
+					
+				}
+				
+				taggedLearnsets.put(line.split(";")[0], temp);
+			}
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	private void setAllMoves() {
+		
+		try {
+			
+			Scanner myobj = new Scanner(new File("AllMoves.txt"));
+			String line = "";
+			int count = 0;
+			
+			while (myobj.hasNextLine()) {
+				line = myobj.nextLine();
+				String temp[] = line.split(";");
+				
+				allMoves[count] = temp[0];
+				allMoveTypes[count] = temp[1];
+				allDamage[count] = temp[2];
+				
+				count++;
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+			
 		}
 		
 	}
@@ -46,11 +191,11 @@ public class ReadWriteShowdown {
 					
 					while(!line.contains("\": {")) {
 						
-						if (line.contains("basePower:")) {
+						if (line.contains("basePower: ")) {
 							basePower = line.trim().replace("basePower:", "").replace(",", "").trim();
-						} else if (line.contains("name:")) {
+						} else if (line.contains("name: ")) {
 							name = line.trim().replace("name:", "").replace("\"", "").replace(",", "").trim();
-						} else if (line.contains("type:")) {
+						} else if (line.contains("type: \"")) {
 							type = line.trim().replace("type:", "").replace("\"", "").replace(",", "").trim();
 						}
 						
@@ -262,7 +407,7 @@ public class ReadWriteShowdown {
 				
 				currentLine = "";
 				
-				for (int i = 0; i < 10; i ++) {
+				for (int i = 0; i < temp.length; i ++) {
 					currentLine += temp[i] + ";";
 				}
 				
