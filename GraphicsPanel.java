@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 	
 	TextInterface theText;
 	
+	ShowdownImportExport convertor = new ShowdownImportExport();
+	
 	Icon allIcons[][];
 	JLabel p1Gif;
 	JLabel p2Gif;
@@ -48,11 +52,14 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 	JPanel mainBuilderPanel = new JPanel();
 	JPanel builderPanel = new JPanel();
 	JPanel builderMessagePanel = new JPanel();
+	JPanel teamImportExportPanel = new JPanel();
+	JPanel teamSavePanel = new JPanel();
 	
 	JPanel monPanels [] = new JPanel[6];
 	JPanel imagePanels[] = new JPanel[6];
 	JPanel namePanels[] = new JPanel[6];
 	JPanel movePanels[] = new JPanel[6];
+	JPanel savePanels[] = new JPanel[6];
 	
 	JPanel allMoves[][] = new JPanel[6][4];
 	
@@ -60,10 +67,20 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 	
 	JTextField moves[][] = new JTextField[6][4];
 	
+	JTextArea importExportTeamText = new JTextArea();
+	
+	JTextArea importExportText[] = new JTextArea[6];
+	
 	JButton validate = new JButton("Validate");
+	JButton importExportTeam = new JButton("Import/Export (whole team)");
+	JButton teamBack = new JButton("Back");
+	JButton teamSave = new JButton("Save");
+	
+	JButton importExport[] = new JButton[6];
+	JButton save[] = new JButton[6];
+	JButton back[] = new JButton[6];
 	
 	JLabel tempImages[] = new JLabel[6];
-	JLabel emptyLabels[] = new JLabel[6];
 	
 	AutoSuggestor [] nameSuggestions = new AutoSuggestor[6];
 	
@@ -73,27 +90,6 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 	public GraphicsPanel(String name){
 
 		super(name);
-		
-		addWindowStateListener(new WindowStateListener() {
-
-			@Override
-			public void windowStateChanged(WindowEvent e) {
-				
-				for (int i = 0; i < 6; i ++) {
-					
-					nameSuggestions[i].hideSuggestionWindow();
-					
-					for (int k = 0; k < 4; k ++) {
-						
-						moveSuggestions[i][k].hideSuggestionWindow();
-						
-					}
-					
-				}
-				
-			}
-			
-		});
 		
 		setupTeamBuilderPanel();
 		
@@ -109,20 +105,37 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		builderPanel.setLayout(new GridLayout(1, 0));
 		builderPanel.setBorder(new LineBorder(Color.BLACK, 1));
 		builderMessagePanel.setBorder(new LineBorder(Color.BLACK, 2));
-		
+		builderMessagePanel.setLayout(new BorderLayout());
+		importExportTeam.addActionListener(this);
+		teamImportExportPanel.setLayout(new BorderLayout());
+		teamSavePanel.setLayout(new BorderLayout());
+		teamSave.addActionListener(this);
+		teamBack.addActionListener(this);
+		importExportTeamText.setWrapStyleWord(true);
+		importExportTeamText.setLineWrap(true);
 		for (int i = 0; i < monPanels.length; i ++) {
 			
 			monPanels[i] = new JPanel();
 			imagePanels[i] = new JPanel();
 			namePanels[i] = new JPanel();
 			movePanels[i] = new JPanel();
+			savePanels[i] = new JPanel();
+			importExport[i] = new JButton("Import/Export");
+			save[i] = new JButton("Save");
+			back[i] = new JButton("Back");
+			importExportText[i] = new JTextArea();
 			
 			names[i] = new JTextField();
 			
 			names[i].addCaretListener(this);
+			importExport[i].addActionListener(this);
+			save[i].addActionListener(this);
+			back[i].addActionListener(this);
 			
-			emptyLabels[i] = new JLabel();
-			tempImages[i] = emptyLabels[i];
+			tempImages[i] = new JLabel();
+			
+			importExportText[i].setWrapStyleWord(true);
+			importExportText[i].setLineWrap(true);
 			
 			monPanels[i].setBorder(new LineBorder(Color.BLACK, 3));
 		    imagePanels[i].setBorder(new LineBorder(Color.BLACK, 3));
@@ -132,12 +145,15 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 			namePanels[i].setLayout(new GridLayout(1, 0));
 			movePanels[i].setLayout(new GridLayout(0, 1));
 			imagePanels[i].setLayout(new BorderLayout());
+			savePanels[i].setLayout(new BorderLayout());
 			
 			namePanels[i].add(new JLabel("      Name:"));
 			namePanels[i].add(names[i]);
-			imagePanels[i].add(tempImages[i]);
 			imagePanels[i].add(namePanels[i], BorderLayout.SOUTH);
+			imagePanels[i].add(importExport[i], BorderLayout.NORTH);
 			monPanels[i].add(imagePanels[i]);
+			savePanels[i].add(save[i], BorderLayout.EAST);
+			savePanels[i].add(back[i], BorderLayout.WEST);
 			
 			for (int k = 0; k < moves[i].length; k ++) {
 				
@@ -164,7 +180,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		String welcomeMessage = "";
 		
-		for (int i = 0; i < 5; i ++) {
+		for (int i = 0; i < 155; i ++) {
 			
 			welcomeMessage += " ";
 			
@@ -176,12 +192,168 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		validate.addActionListener(this);
 		
+		teamSavePanel.add(teamBack, BorderLayout.WEST);
+		teamSavePanel.add(teamSave, BorderLayout.EAST);
 		builderMessagePanel.add(new JLabel(welcomeMessage));
+		builderMessagePanel.add(importExportTeam, BorderLayout.EAST);
 		mainBuilderPanel.add(builderMessagePanel, BorderLayout.NORTH);
 		mainBuilderPanel.add(validate, BorderLayout.SOUTH);
 		mainBuilderPanel.add(builderPanel);
 		
 		c.add(mainBuilderPanel);
+	}
+	
+	private void setupImportScreen(int i) {
+		
+		monPanels[i].removeAll();
+		monPanels[i].setLayout(new BorderLayout());
+		
+		importExportText[i].setText(convertor.makeShowdownText(names[i].getText(), moves[i][0].getText(), moves[i][1].getText(), moves[i][2].getText(), moves[i][3].getText()));
+		importExportText[i].setBorder(new LineBorder(Color.BLACK, 1));
+		if (importExportText[i].getText().trim().isEmpty()) {
+			importExportText[i].setForeground(Color.LIGHT_GRAY);
+			importExportText[i].setText(" Paste your text here!");
+		}
+		importExportText[i].addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+
+				importExportText[i].setForeground(Color.BLACK);
+				if (importExportText[i].getText().trim().equals("Paste your text here!")) {
+					importExportText[i].setText("");
+				}
+				importExportText[i].setBorder(new LineBorder(new Color(0, 60, 137), 3));
+				
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				importExportText[i].setBorder(new LineBorder(Color.BLACK, 1));
+				if (importExportText[i].getText().trim().isEmpty()) {
+					importExportText[i].setForeground(Color.LIGHT_GRAY);
+					importExportText[i].setText(" Paste your text here!");
+				}
+				
+			}
+			
+		});
+		
+		JPanel temp = new JPanel();
+		temp.setLayout(new GridLayout(0,1));
+		temp.setBorder(new LineBorder(Color.WHITE, 1));
+		temp.add(importExportText[i]);
+		
+		monPanels[i].add(temp, BorderLayout.CENTER);
+		monPanels[i].add(savePanels[i], BorderLayout.NORTH);
+		
+		updateAll();
+	}
+	
+	private void resetMonPanel(int i) {
+		
+		monPanels[i].removeAll();
+		monPanels[i].setLayout(new GridLayout(0, 1));
+		
+		monPanels[i].add(imagePanels[i]);
+		monPanels[i].add(movePanels[i]);
+		
+		updateAll();
+		
+	}
+	
+	private void resetMainBuilderPanel() {
+		
+		mainBuilderPanel.removeAll();
+		mainBuilderPanel.setLayout(new BorderLayout());
+		mainBuilderPanel.setBorder(new LineBorder(Color.BLACK, 2));
+		
+		mainBuilderPanel.add(builderPanel, BorderLayout.CENTER);
+		mainBuilderPanel.add(builderMessagePanel, BorderLayout.NORTH);
+		mainBuilderPanel.add(validate, BorderLayout.SOUTH);
+		
+		for (int i = 0; i < 6; i ++) {
+
+			updateImage(i);
+			
+		}
+		
+		updateAll();
+		
+	}
+	
+	private void setupTeamImportScreen() {
+		
+		mainBuilderPanel.removeAll();
+		mainBuilderPanel.setLayout(new GridLayout(1, 0));
+		
+		String monNames[] = new String[6];
+		String move1[] = new String[6];
+		String move2[] = new String[6];
+		String move3[] = new String[6];
+		String move4[] = new String[6];
+		
+		for (int i = 0; i < monNames.length; i ++) {
+			
+			monNames[i] = names[i].getText();
+			move1[i] = moves[i][0].getText();
+			move2[i] = moves[i][1].getText();
+			move3[i] = moves[i][2].getText();
+			move4[i] = moves[i][3].getText();
+			
+		}
+		
+		importExportTeamText.setText(convertor.makeShowdownTeamText(monNames, move1, move2, move3, move4));
+		
+		importExportTeamText.setBorder(new LineBorder(Color.BLACK, 1));
+		if (importExportTeamText.getText().trim().isEmpty()) {
+			importExportTeamText.setForeground(Color.LIGHT_GRAY);
+			importExportTeamText.setText(" Paste your text here!");
+		}
+		importExportTeamText.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+
+				importExportTeamText.setForeground(Color.BLACK);
+				if (importExportTeamText.getText().trim().equals("Paste your text here!")) {
+					importExportTeamText.setText("");
+				}
+				importExportTeamText.setBorder(new LineBorder(new Color(0, 60, 137), 3));
+				
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				importExportTeamText.setBorder(new LineBorder(Color.BLACK, 1));
+				if (importExportTeamText.getText().trim().isEmpty()) {
+					importExportTeamText.setForeground(Color.LIGHT_GRAY);
+					importExportTeamText.setText(" Paste your text here!");
+				}
+				
+			}
+			
+		});
+		
+		JPanel temp = new JPanel();
+		temp.setLayout(new GridLayout(0,1));
+		temp.setBorder(new LineBorder(Color.WHITE, 1));
+		temp.add(importExportTeamText);
+		
+		teamImportExportPanel.removeAll();
+		
+		teamImportExportPanel.add(temp, BorderLayout.CENTER);
+		teamImportExportPanel.add(teamSavePanel, BorderLayout.NORTH);
+
+		mainBuilderPanel.add(new JLabel());
+		mainBuilderPanel.add(teamImportExportPanel);
+		mainBuilderPanel.add(new JLabel());
+		
+		updateAll();
+		
+		
 	}
 	
 	private void setupBattlePanel() {
@@ -432,6 +604,10 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 				
 				answer += "Pokemon #" + (i + 1) + " is invalid\n";
 				
+			} else if (info.noMoves(currentName)){
+				
+				answer += "Pokemon #" + (i + 1) + " doesn't have any damaging moves, please choose a different Pokemon\n";
+				
 			} else {
 				
 				tempMonNames[i] = currentName;
@@ -448,7 +624,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 					
 				}
 				
-				if (!info.validMove(moves[i][k].getText().replace(" ", "").toLowerCase(), currentName)) {
+				if (!info.validMove(moves[i][k].getText(), currentName)) {
 					
 					answer += "Pokemon #" + (i + 1) + ", move #" + (k + 1) + " is invalid\n";
 					invalidMove = true;
@@ -468,57 +644,148 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		if (invalidMove) {
 			
-			answer += "***Please keep in mind only damaging moves without recoil are allowed, if there aren't enough for 4 moves, leave fields blank***";
+			answer += "***Please keep in mind only damaging moves without recoil or charge are allowed, if there aren't enough for 4 moves, leave fields blank***";
 			
 		}
 		
 		return answer;
 		
 	}
+	
+	private void updateImage(int i) {
+		
+		if (info.validPokemon(names[i].getText()) && tempImages[i].getParent() == null) {
+			
+			ImageIcon temp = new ImageIcon(this.getClass().getResource("SpritesFront/" + names[i].getText().replace(" ", "").replace(":", "").replace("'", "").replace(".", "").replace("-", "").toLowerCase() + ".gif"));
+			temp = new ImageIcon(temp.getImage().getScaledInstance((int)(temp.getIconWidth() * 1.5), (int)(temp.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
+			Icon icon = temp;
+			
+			imagePanels[i].remove(tempImages[i]);
+			
+			tempImages[i] = new JLabel(icon);
+			
+			imagePanels[i].add(tempImages[i]);
+			
+			for (int k = 0; k < 4; k ++) {
+				
+				ArrayList<String> temp2 = new ArrayList<String>();
+				
+				Collections.addAll(temp2, info.getLearnset(names[i].getText()));
+				
+				moveSuggestions[i][k].setDictionary(temp2);
+				
+				moves[i][k].setText("");
+				
+			}
+			
+			updateAll();
+		
+		}
+		
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (validatePokemon().isEmpty()) {
+		if (validate.equals((JButton) e.getSource())) {
+			if (validatePokemon().isEmpty()) {
+
+				JOptionPane.showMessageDialog(null, "Confirmed, your pokemon and moves are all valid!", "", JOptionPane.INFORMATION_MESSAGE);
+
+			} else {
+
+
+				JOptionPane.showMessageDialog(null, validatePokemon(), "", JOptionPane.ERROR_MESSAGE);
+
+			}
+		} else if (importExportTeam.equals((JButton)e.getSource())){
 			
-			JOptionPane.showMessageDialog(null, "Confirmed" , "", JOptionPane.INFORMATION_MESSAGE);
+			setupTeamImportScreen();
+			
+		} else if (teamBack.equals((JButton)e.getSource())) {
+			
+			resetMainBuilderPanel();
+		
+		} else if (teamSave.equals((JButton)e.getSource())) {
+			
+			String temp[] = convertor.decodeTeamText(importExportTeamText.getText());
+			
+			for (int i = 0; i < temp.length; i++) {
+				
+				String temp2[] = temp[i].split("\n");
+				
+				names[i].setText(temp2[0].trim());
+				moves[i][0].setText(temp2[1].trim());
+				moves[i][1].setText(temp2[2].trim());
+				moves[i][2].setText(temp2[3].trim());
+				moves[i][3].setText(temp2[4].trim());
+				
+				updateImage(i);
+				
+			}
+			
+			resetMainBuilderPanel();
 			
 		} else {
 			
-			JOptionPane.showMessageDialog(null, validatePokemon() , "", JOptionPane.ERROR_MESSAGE);
+			for (int i = 0; i < importExport.length; i ++) {
+				
+				if (importExport[i].equals((JButton)e.getSource())){
+					
+					setupImportScreen(i);
+					break;
+					
+				} else if (save[i].equals((JButton)e.getSource())) {
+					
+					String temp[] = convertor.decodePokemonText(importExportText[i].getText()).split("\n");
+					
+					names[i].setText(temp[0].trim());
+					moves[i][0].setText(temp[1].trim());
+					moves[i][1].setText(temp[2].trim());
+					moves[i][2].setText(temp[3].trim());
+					moves[i][3].setText(temp[4].trim());
+					
+					updateImage(i);
+					resetMonPanel(i);
+					
+				} else if (back[i].equals((JButton)e.getSource())) {
+					
+					resetMonPanel(i);
+					
+				}
+				
+			}
 			
 		}
+		
+		
 	}
 	
 	
 	@Override
 	public void caretUpdate(CaretEvent e) {
 		
-		for (int i = 0; i < names.length; i ++) {
-		
-			if (info.validPokemon(names[i].getText()) && tempImages[i].getParent() == null) {
+		int i = 0;
+		for (i = 0; i < names.length; i ++) {
+			
+			if (names[i].equals((JTextField)e.getSource())) {
 				
-				ImageIcon temp = new ImageIcon(this.getClass().getResource("SpritesFront/" + names[i].getText().replace(" ", "").replace(":", "").replace("'", "").replace(".", "").replace("-", "").toLowerCase() + ".gif"));
-				temp = new ImageIcon(temp.getImage().getScaledInstance((int)(temp.getIconWidth() * 1.5), (int)(temp.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
-				Icon icon = temp;
-				
-				imagePanels[i].remove(tempImages[i]);
-				
-				tempImages[i] = new JLabel(icon);
-				
-				imagePanels[i].add(tempImages[i]);
-				
-				updateAll();
-				
-			} else if (!info.validPokemon(names[i].getText())){
-				
-				imagePanels[i].remove(tempImages[i]);
-				
-				updateAll();
+				break;
 				
 			}
 			
 		}
+		
+		updateImage(i);
+		
+		if (!info.validPokemon(names[i].getText())) {
+
+			imagePanels[i].remove(tempImages[i]);
+
+			updateAll();
+
+		}
+			
 	}
 
 }

@@ -147,23 +147,26 @@ public class AutoSuggestor {
     }
 
     private void checkForAndShowSuggestions() {
+    	String temp = typedWord;
         typedWord = getCurrentlyTypedWord();
 
-        suggestionsPanel.removeAll();//remove previos words/jlabels that were added
-
-        //used to calcualte size of JWindow as new Jlabels are added
-        tW = 0;
-        tH = 0;
-
-        boolean added = wordTyped(typedWord);
-
-        if (!added) {
-            if (autoSuggestionPopUpWindow.isVisible()) {
-                autoSuggestionPopUpWindow.setVisible(false);
-            }
-        } else {
-            showPopUpWindow();
-            setFocusToTextField();
+        if (temp.length() + 1 == typedWord.length() || temp.length() - 1 == typedWord.length()) {
+	        suggestionsPanel.removeAll();//remove previos words/jlabels that were added
+	
+	        //used to calcualte size of JWindow as new Jlabels are added
+	        tW = 0;
+	        tH = 0;
+	
+	        boolean added = wordTyped(typedWord);
+	
+	        if (!added) {
+	            if (autoSuggestionPopUpWindow.isVisible()) {
+	                autoSuggestionPopUpWindow.setVisible(false);
+	            }
+	        } else {
+	            showPopUpWindow();
+	            setFocusToTextField();
+	        }
         }
     }
 

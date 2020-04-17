@@ -28,25 +28,25 @@ public class PokemonLearnsets {
 		
 	}
 	
-	public String [] getLearnset(String name) {
+	public boolean noMoves(String name) {
 		
-		return allLearnsets.get(name);
+		try {
+			
+			String test = allLearnsets.get(name)[0];
+			
+			return false;
+			
+		} catch (ArrayIndexOutOfBoundsException e) {
+			
+			return true;
+			
+		}
 		
 	}
 	
-	public String getTrueName(String name) {
+	public String [] getLearnset(String name) {
 		
-		for (String element : allNames) {
-
-			if (element.equalsIgnoreCase(name)) {
-
-				return element;
-
-			}
-
-		}
-		
-		return "Not a name";
+		return allLearnsets.get(name);
 		
 	}
 

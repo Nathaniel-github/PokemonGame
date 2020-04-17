@@ -3,6 +3,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
@@ -15,9 +19,11 @@ public class ReadWriteShowdown {
 	File f;
 	String file;
 	FileWriter myWriter;
-	String [] allMoves = new String[402];
-	String [] allDamage = new String[402];
-	String [] allMoveTypes = new String[402];
+	ReadWrite kleb = new ReadWrite("Stats.txt");
+	String [] allNames = kleb.getAllNames();
+	String [] allMoves = new String[397];
+	String [] allDamage = new String[397];
+	String [] allMoveTypes = new String[397];
 	HashMap <String, String[]> taggedLearnsets = new HashMap <String, String[]>();
 	
 	public ReadWriteShowdown(String readURL, String writeURL, boolean overwrite) {
@@ -39,134 +45,123 @@ public class ReadWriteShowdown {
 		
 	}
 	
-	public HashMap <String, String[]> getAllTaggedLearnsets() {
-		
-		return taggedLearnsets;
-		
-	}
-	
 	public String [] getAllMoves() {
 		
 		return allMoves;
 		
 	}
 	
+	public HashMap <String, String[]> getAllTaggedLearnsets() {
+		
+		return taggedLearnsets;
+		
+	}
+	
 	public void writeAllMoves() {
 		
+			
+		PrintWriter writer = null;
 		try {
-			
-			FileWriter writer = new FileWriter(new File("AllMoves.txt"));
-			
-			for (int i = 0; i < allMoves.length; i ++) {
-				
-				writer.write(allMoves[i] + ";" + allMoveTypes[i] + ";" + allDamage[i] + ";\n");
-				writer.flush();
-				
-			}
-			
-		} catch (Exception e) {
-			
+			writer = new PrintWriter(new File("AllMoves.txt"));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			
 		}
+
+		for (int i = 0; i < allMoves.length; i++) {
+
+			writer.println(allMoves[i] + ";" + allMoveTypes[i] + ";" + allDamage[i] + ";");
+
+		}
+		
+		writer.close();
 		
 	}
 	
 	public void writeAllLearnsets() {
-
-		ReadWrite kleb = new ReadWrite("Stats.txt");
-		String [] allNames = kleb.getAllNames();
-	
+			
+		PrintWriter writer = null;
 		try {
-			
-			FileWriter writer = new FileWriter(new File("Learnsets.txt"));
-			
-			for (int k = 0; k < taggedLearnsets.size(); k ++) {
-				
-				writer.write(allNames[k] + ";");
-
-				writer.flush();
-				
-				for (int i = 0; i < taggedLearnsets.get(allNames[k]).length; i ++) {
-					
-					if (taggedLearnsets.get(allNames[k])[i] == null) {
-						
-						break;
-						
-					}
-					writer.write(taggedLearnsets.get(allNames[k])[i] + ";");
-
-					writer.flush();
-				}
-				
-				writer.write("\n");
-
-				writer.flush();
-				
-			}
-			
-		} catch (Exception e) {
-			
+			writer = new PrintWriter(new File("Learnsets.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
 		}
+
+		for (int k = 0; k < taggedLearnsets.size(); k++) {
+
+			writer.print(allNames[k] + ";");
+
+			for (int i = 0; i < taggedLearnsets.get(allNames[k]).length; i++) {
+
+				if (taggedLearnsets.get(allNames[k])[i] == null) {
+
+					break;
+
+				}
+				writer.print(taggedLearnsets.get(allNames[k])[i] + ";");
+			}
+
+			writer.println();;
+
+		}
+		
+		writer.close();
 		
 	}
 	
 	private void setAllLearnsets() {
 		
 		try {
-			
+
 			Scanner myobj = new Scanner(new File("Learnsets.txt"));
 			String line = "";
 
-			
 			while (myobj.hasNextLine()) {
 				line = myobj.nextLine();
-				String temp[] = new String [line.split(";").length - 1];
+				String temp[] = new String[line.split(";").length - 1];
 				String temp2[] = line.split(";");
-				
-				for (int i = 1; i < temp2.length; i ++) {
-					
-					temp[i-1] = temp2[i];
-					
+
+				for (int i = 1; i < temp2.length; i++) {
+
+					temp[i - 1] = temp2[i];
+
 				}
-				
+
 				taggedLearnsets.put(line.split(";")[0], temp);
 			}
-			
+
 		} catch (FileNotFoundException e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
-		
+
 	}
 	
 	private void setAllMoves() {
 		
 		try {
-			
+
 			Scanner myobj = new Scanner(new File("AllMoves.txt"));
 			String line = "";
 			int count = 0;
-			
+
 			while (myobj.hasNextLine()) {
 				line = myobj.nextLine();
 				String temp[] = line.split(";");
-				
+
 				allMoves[count] = temp[0];
 				allMoveTypes[count] = temp[1];
 				allDamage[count] = temp[2];
-				
+
 				count++;
-				
+
 			}
-			
+
 		} catch (FileNotFoundException e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
 		
 	}
@@ -465,54 +460,6 @@ public class ReadWriteShowdown {
 		} catch(FileNotFoundException ee) {
 			ee.printStackTrace();
 		}
-	}
-	
-	public String makeMoveset(String [] names, String [] moveNames) {
-		String answer = "AllGood";
-		
-		String currentLine;
-		Scanner sc;
-		int count = 0;
-		try {
-			sc = new Scanner(f);
-			
-			while(sc.hasNextLine()) {
-
-				currentLine = sc.nextLine();
-
-				if (currentLine.contains(names[count])) {
-
-					names[count] = names[count].replaceAll("-", "").replaceAll(" ", "").replaceAll(".", "").toLowerCase();
-
-					currentLine += getMovesets(names[count], moveNames);
-
-					if (currentLine.contains("InvalidMove")) {
-						return currentLine;
-					}
-					
-					try {
-						myWriter.write(currentLine + "\n");
-						myWriter.flush();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					
-					count++;
-					
-					if (count >= names.length) {
-						break;
-					}
-					
-				}
-			
-			}
-			sc.close();
-			return answer;
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-			return null;
-		}
-		
 	}
 	
 }
