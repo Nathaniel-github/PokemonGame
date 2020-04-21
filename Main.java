@@ -15,7 +15,7 @@ public class Main {
 		Downloader myDownloader = new Downloader();
 		
 		GraphicsPanel window = new GraphicsPanel("Pokemon");
-		window.setBounds(0, 0, 1440, 830);
+		window.setBounds(0, 0, (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 		
@@ -48,58 +48,78 @@ public class Main {
 		//Arrays that hold temporary values
 		
 		
-		for (int k = 1; k <= 2; k++) { 
-			for (int i = 0; i < 6; i++) {
-				boolean invalid = true;
-				int dex = 0;
-				int dexn = 0;
-				while (invalid) { //Tests to make sure the user inputs a dex number that is available and won't exit otherwise
-					if (k == 1 && first) {
-						myPrinter.typeMessage("Player 1: ");
-						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
-						first = false;
-					}
-					else if (k == 2 && first){
-						myPrinter.typeMessage("Player 2: ");
-						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
-						first = false;
-					}
-					
-					dex = myobj.checkIntRange((i + 1) + ": ", 1, 802);
-					dexn = myTranslator.getIntForDexNum(dex);
-					int validMon = info.checkValidMon(dexn);
-					
-					if (validMon == -1) {
-						myPrinter.typeMessage("That Pokemon does not have any attacking moves and this program does not currently handle status moves.\nPlease choose another Pokemon.");
-						invalid = true;
-						continue;
-					}
-					if (dexn == -1) { // -1 is the return value if the input value is not an accepted value
-						myPrinter.typeMessage("That was not a valid dex number");
-					} else {
-						invalid = false;
-					}
-					for (int element : allDexNums[k]) {
-						if (element == dex) {
-							myPrinter.typeMessage("That pokemon was already chosen by you");
-							invalid = true;
-						}
-					}
-					if (!invalid) {
-						myPrinter.typeMessage("You chose: " + info.getInfo(segments[1], dex) + "!");
-					}
-				}
-				allDexNums[k][i] = dex;
+//		for (int k = 1; k <= 2; k++) { 
+//			for (int i = 0; i < 6; i++) {
+//				boolean invalid = true;
+//				int dex = 0;
+//				int dexn = 0;
+//				while (invalid) { //Tests to make sure the user inputs a dex number that is available and won't exit otherwise
+//					if (k == 1 && first) {
+//						myPrinter.typeMessage("Player 1: ");
+//						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
+//						first = false;
+//					}
+//					else if (k == 2 && first){
+//						myPrinter.typeMessage("Player 2: ");
+//						myPrinter.typeMessage("Enter the national dex number of the pokemon you want (Generations 1-7 accepted):");
+//						first = false;
+//					}
+//					
+//					dex = myobj.checkIntRange((i + 1) + ": ", 1, 802);
+//					dexn = myTranslator.getIntForDexNum(dex);
+//					int validMon = info.checkValidMon(dexn);
+//					
+//					if (validMon == -1) {
+//						myPrinter.typeMessage("That Pokemon does not have any attacking moves and this program does not currently handle status moves.\nPlease choose another Pokemon.");
+//						invalid = true;
+//						continue;
+//					}
+//					if (dexn == -1) { // -1 is the return value if the input value is not an accepted value
+//						myPrinter.typeMessage("That was not a valid dex number");
+//					} else {
+//						invalid = false;
+//					}
+//					for (int element : allDexNums[k]) {
+//						if (element == dex) {
+//							myPrinter.typeMessage("That pokemon was already chosen by you");
+//							invalid = true;
+//							break;
+//						}
+//					}
+//					if (!invalid) {
+//						myPrinter.typeMessage("You chose: " + info.getInfo(segments[1], dex) + "!");
+//					}
+//				}
+//				allDexNums[k][i] = dex;
+//			}
+//			first = true;
+//		}
+//		for (int l = 1; l <= 2; l++) { //Stores all the stats from the pokemon that were selected based on dex number
+//			for (int k = 0; k < segments.length; k++) {
+//				for (int i = 0; i < 6; i++) {
+//					allInfo[l][k][i] = info.getInfo(segments[k], allDexNums[l][i]);
+//				}
+//			}
+//		}
+		
+		synchronized (window) {
+			try {
+				window.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			first = true;
 		}
-		for (int l = 1; l <= 2; l++) { //Stores all the stats from the pokemon that were selected based on dex number
+		
+		String [][] builtStats = window.getAllInfo();
+		
+		for (int l = 1; l <= 2; l++) { 
 			for (int k = 0; k < segments.length; k++) {
 				for (int i = 0; i < 6; i++) {
-					allInfo[l][k][i] = info.getInfo(segments[k], allDexNums[l][i]);
+					allInfo[l][k][i] = builtStats[i][k];
 				}
 			}
 		}
+		
 		info.storeInfo(allInfo); //Passes the info into the other class so methods from said class can access values from it at ease
 		allMonHP = info.getAllHP();
 		allMonAttack = info.getAllAttack();

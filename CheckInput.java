@@ -12,7 +12,6 @@ public class CheckInput {
 	Typing printer;
 	public CheckInput() {
 		printer = new Typing();
-		
 	}
 	
 	public int getInt(String message) { //Method that checks to make sure that the input is an integer
@@ -28,7 +27,6 @@ public class CheckInput {
 				printer.typeMessage("That wasn't a valid input");
 				printer.typeMessage(message);
 				printer.myPanel.writeToScreen(myobj.getBoxText());
-				myobj.moveOn = false;
 			}
 		}
 		return output;
@@ -53,7 +51,6 @@ public class CheckInput {
 				printer.typeMessage("That wasn't a valid input");
 				printer.typeMessage(message);
 				printer.myPanel.writeToScreen(myobj.getBoxText());
-				myobj.moveOn = false;
 				myobj.myTextField.setText("");
 			}
 		}

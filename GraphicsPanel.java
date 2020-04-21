@@ -43,17 +43,20 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 	
 	TextInterface theText;
 	
-	ShowdownImportExport convertor = new ShowdownImportExport();
+	ShowdownImportExport converter = new ShowdownImportExport();
 	
 	Icon allIcons[][];
 	JLabel p1Gif;
 	JLabel p2Gif;
+	
+	FadeLabel titleName = new FadeLabel();
 	
 	JPanel mainBuilderPanel = new JPanel();
 	JPanel builderPanel = new JPanel();
 	JPanel builderMessagePanel = new JPanel();
 	JPanel teamImportExportPanel = new JPanel();
 	JPanel teamSavePanel = new JPanel();
+	JPanel welcomePanel = new JPanel();
 	
 	JPanel monPanels [] = new JPanel[6];
 	JPanel imagePanels[] = new JPanel[6];
@@ -91,9 +94,29 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 
 		super(name);
 		
-		setupTeamBuilderPanel();
+		setupWelcomePanel();
 		
-//		setupBattlePanel();
+//		setupTeamBuilderPanel();
+	}
+	
+	private void setupWelcomePanel() {
+		
+		Container c = getContentPane();
+		
+		welcomePanel.setLayout(new BorderLayout());
+		
+		ImageIcon temp = new ImageIcon("res/" + "abra" + ".gif");
+		temp = new ImageIcon(temp.getImage().getScaledInstance((int)(temp.getIconWidth() * 1.5), (int)(temp.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
+		Icon icon = temp;
+		
+		titleName = new FadeLabel(icon);
+		
+		welcomePanel.add(titleName, BorderLayout.CENTER);
+		
+		c.add(welcomePanel);
+		
+		titleName.startFade();
+		
 	}
 	
 	private void setupTeamBuilderPanel() {
@@ -113,6 +136,28 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		teamBack.addActionListener(this);
 		importExportTeamText.setWrapStyleWord(true);
 		importExportTeamText.setLineWrap(true);
+		importExportTeamText.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+
+				importExportTeamText.setForeground(Color.BLACK);
+				if (importExportTeamText.getText().trim().equals("Paste your text here!")) {
+					importExportTeamText.setText("");
+				}
+				importExportTeamText.setBorder(new LineBorder(new Color(0, 60, 137), 3));
+				
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				importExportTeamText.setBorder(new LineBorder(Color.BLACK, 1));
+				
+			}
+			
+		});
+		
 		for (int i = 0; i < monPanels.length; i ++) {
 			
 			monPanels[i] = new JPanel();
@@ -131,6 +176,28 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 			importExport[i].addActionListener(this);
 			save[i].addActionListener(this);
 			back[i].addActionListener(this);
+			int temp = i;
+			importExportText[i].addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusGained(FocusEvent e) {
+
+					importExportText[temp].setForeground(Color.BLACK);
+					if (importExportText[temp].getText().trim().equals("Paste your text here!")) {
+						importExportText[temp].setText("");
+					}
+					importExportText[temp].setBorder(new LineBorder(new Color(0, 60, 137), 3));
+					
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					
+					importExportText[temp].setBorder(new LineBorder(Color.BLACK, 1));
+					
+				}
+				
+			});
 			
 			tempImages[i] = new JLabel();
 			
@@ -208,37 +275,12 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		monPanels[i].removeAll();
 		monPanels[i].setLayout(new BorderLayout());
 		
-		importExportText[i].setText(convertor.makeShowdownText(names[i].getText(), moves[i][0].getText(), moves[i][1].getText(), moves[i][2].getText(), moves[i][3].getText()));
+		importExportText[i].setText(makeExportText(i));
 		importExportText[i].setBorder(new LineBorder(Color.BLACK, 1));
 		if (importExportText[i].getText().trim().isEmpty()) {
 			importExportText[i].setForeground(Color.LIGHT_GRAY);
 			importExportText[i].setText(" Paste your text here!");
 		}
-		importExportText[i].addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-
-				importExportText[i].setForeground(Color.BLACK);
-				if (importExportText[i].getText().trim().equals("Paste your text here!")) {
-					importExportText[i].setText("");
-				}
-				importExportText[i].setBorder(new LineBorder(new Color(0, 60, 137), 3));
-				
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				
-				importExportText[i].setBorder(new LineBorder(Color.BLACK, 1));
-				if (importExportText[i].getText().trim().isEmpty()) {
-					importExportText[i].setForeground(Color.LIGHT_GRAY);
-					importExportText[i].setText(" Paste your text here!");
-				}
-				
-			}
-			
-		});
 		
 		JPanel temp = new JPanel();
 		temp.setLayout(new GridLayout(0,1));
@@ -249,6 +291,12 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		monPanels[i].add(savePanels[i], BorderLayout.NORTH);
 		
 		updateAll();
+	}
+	
+	private String makeExportText(int i) {
+		
+		return converter.makeShowdownText(names[i].getText(), moves[i][0].getText(), moves[i][1].getText(), moves[i][2].getText(), moves[i][3].getText());
+		
 	}
 	
 	private void resetMonPanel(int i) {
@@ -304,38 +352,13 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 			
 		}
 		
-		importExportTeamText.setText(convertor.makeShowdownTeamText(monNames, move1, move2, move3, move4));
+		importExportTeamText.setText(converter.makeShowdownTeamText(monNames, move1, move2, move3, move4));
 		
 		importExportTeamText.setBorder(new LineBorder(Color.BLACK, 1));
 		if (importExportTeamText.getText().trim().isEmpty()) {
 			importExportTeamText.setForeground(Color.LIGHT_GRAY);
 			importExportTeamText.setText(" Paste your text here!");
 		}
-		importExportTeamText.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-
-				importExportTeamText.setForeground(Color.BLACK);
-				if (importExportTeamText.getText().trim().equals("Paste your text here!")) {
-					importExportTeamText.setText("");
-				}
-				importExportTeamText.setBorder(new LineBorder(new Color(0, 60, 137), 3));
-				
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				
-				importExportTeamText.setBorder(new LineBorder(Color.BLACK, 1));
-				if (importExportTeamText.getText().trim().isEmpty()) {
-					importExportTeamText.setForeground(Color.LIGHT_GRAY);
-					importExportTeamText.setText(" Paste your text here!");
-				}
-				
-			}
-			
-		});
 		
 		JPanel temp = new JPanel();
 		temp.setLayout(new GridLayout(0,1));
@@ -401,8 +424,28 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		c.add(mainPanel, BorderLayout.CENTER);
 		
 		c.add(bottomPanel, BorderLayout.SOUTH);
+	}
+	
+	public String[][] getAllInfo() { 
+		
+		String [][] answer = new String [6][22];
+		
+		for (int i = 0; i < 6; i++) {
+			
+			String temp = makeExportText(i);
+			
+			String temp2 = converter.decodePokemonText(temp);
+			
+			String temp3 [] = info.getInfo(temp2);
+			
+			answer[i] = info.getInfo(converter.decodePokemonText(makeExportText(i)));
+			
+		}
+		
+		return answer;
 		
 	}
+	
 	
 	private void setupSuggestions() {
 
@@ -423,6 +466,14 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 			}
 			
 		}
+		
+	}
+	
+	private void resetPanel() {
+		
+		remove(mainBuilderPanel);
+		remove(mainPanel);
+		remove(bottomPanel);
 		
 	}
 	
@@ -448,12 +499,12 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		animationPanel.removeAll();
 		
-		ImageIcon secImage = new ImageIcon(this.getClass().getResource("SpritesFront/" + name2 + ".gif"));
+		ImageIcon secImage = new ImageIcon("res/" + ("SpritesFront/" + name2 + ".gif"));
 		secImage = new ImageIcon(secImage.getImage().getScaledInstance((int)(secImage.getIconWidth() * 1.5), (int)(secImage.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
 		Icon icon = secImage;
 		p2Gif = new JLabel(icon);
 	
-		ImageIcon firstImage = new ImageIcon(this.getClass().getResource("SpritesBack/" + name1 + "-back.gif"));
+		ImageIcon firstImage = new ImageIcon("res/" + ("SpritesBack/" + name1 + "-back.gif"));
 		firstImage = new ImageIcon(firstImage.getImage().getScaledInstance((int)(firstImage.getIconWidth() * 1.5), (int)(firstImage.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
 		Icon icon2 = firstImage;
 		p1Gif = new JLabel(icon2);
@@ -615,6 +666,8 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 			}
 
 			int count = 0;
+
+			String [] tempMoveNames = new String[4];
 			
 			for (int k = 0; k < moves[i].length; k++) {
 				
@@ -624,10 +677,28 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 					
 				}
 				
+				for (String element : tempMoveNames) {
+					
+					if (element == null) {
+						
+						continue;
+						
+					} else if (element.equalsIgnoreCase(moves[i][k].getText())) {
+						
+						answer += "Pokemon #" + (i + 1) + " has duplicate moves\n";
+						
+					}
+					
+				}
+				
 				if (!info.validMove(moves[i][k].getText(), currentName)) {
 					
 					answer += "Pokemon #" + (i + 1) + ", move #" + (k + 1) + " is invalid\n";
 					invalidMove = true;
+					
+				} else {
+					
+					tempMoveNames[k] = moves[i][k].getText();
 					
 				}
 				
@@ -656,7 +727,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		if (info.validPokemon(names[i].getText()) && tempImages[i].getParent() == null) {
 			
-			ImageIcon temp = new ImageIcon(this.getClass().getResource("SpritesFront/" + names[i].getText().replace(" ", "").replace(":", "").replace("'", "").replace(".", "").replace("-", "").toLowerCase() + ".gif"));
+			ImageIcon temp = new ImageIcon("res/" + ("SpritesFront/" + names[i].getText().replace(" ", "").replace(":", "").replace("'", "").replace(".", "").replace("-", "").toLowerCase() + ".gif"));
 			temp = new ImageIcon(temp.getImage().getScaledInstance((int)(temp.getIconWidth() * 1.5), (int)(temp.getIconHeight() * 1.5), Image.SCALE_DEFAULT));
 			Icon icon = temp;
 			
@@ -670,7 +741,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 				
 				ArrayList<String> temp2 = new ArrayList<String>();
 				
-				Collections.addAll(temp2, info.getLearnset(names[i].getText()));
+				Collections.addAll(temp2, info.getLearnset(info.getTrueName(names[i].getText())));
 				
 				moveSuggestions[i][k].setDictionary(temp2);
 				
@@ -692,6 +763,14 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 
 				JOptionPane.showMessageDialog(null, "Confirmed, your pokemon and moves are all valid!", "", JOptionPane.INFORMATION_MESSAGE);
 
+				resetPanel();
+				setupBattlePanel();
+				synchronized (this) {
+					this.notify();
+				}
+				
+				updateAll();
+				
 			} else {
 
 
@@ -708,7 +787,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 		
 		} else if (teamSave.equals((JButton)e.getSource())) {
 			
-			String temp[] = convertor.decodeTeamText(importExportTeamText.getText());
+			String temp[] = converter.decodeTeamText(importExportTeamText.getText());
 			
 			for (int i = 0; i < temp.length; i++) {
 				
@@ -737,7 +816,7 @@ public class GraphicsPanel extends JFrame implements ActionListener, CaretListen
 					
 				} else if (save[i].equals((JButton)e.getSource())) {
 					
-					String temp[] = convertor.decodePokemonText(importExportText[i].getText()).split("\n");
+					String temp[] = converter.decodePokemonText(importExportText[i].getText()).split("\n");
 					
 					names[i].setText(temp[0].trim());
 					moves[i][0].setText(temp[1].trim());

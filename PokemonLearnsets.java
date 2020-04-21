@@ -28,6 +28,12 @@ public class PokemonLearnsets {
 		
 	}
 	
+	public String [] getInfo(String text) {
+		
+		return moves.getPokemonDataLine(text).split(";");
+		
+	}
+	
 	public boolean noMoves(String name) {
 		
 		try {
@@ -42,6 +48,22 @@ public class PokemonLearnsets {
 			
 		}
 		
+	}
+	
+	public String getTrueName(String name) {
+
+		for (String element : allNames) {
+
+			if (element.equalsIgnoreCase(name)) {
+
+				return element;
+
+			}
+
+		}
+
+		return "Not a name";
+
 	}
 	
 	public String [] getLearnset(String name) {

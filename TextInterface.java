@@ -8,36 +8,46 @@ import javax.swing.JTextField;
 public class TextInterface{
 
 	JTextField myTextField;
-	boolean moveOn = false;
 	GraphicsPanel myPanel;
+	Object sync = new Object();
 	AbstractAction action = new AbstractAction() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			moveOn = true;
+			synchronized (sync) {
+				sync.notify();
+			}
 		}
 	};
+	boolean hasNextInt = false;
 	
 	public TextInterface(JTextField getThisText) {
 		myTextField = getThisText;
 	}
 	
 	public String next() {
-		while(!moveOn) {
-			moveOn = getMoveOn();
+		synchronized (sync) {
+			try {
+				sync.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		String answer = myTextField.getText();
 		myPanel.writeToScreen(answer + "\n");
 		myTextField.setText("");
-		moveOn = false;
 		return answer;
 	}
 	
 	public String nextLine() {
-		while(!moveOn) {
-			moveOn = getMoveOn();
+		synchronized (sync) {
+			try {
+				sync.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
-		moveOn = false;
 		
 		String answer = myTextField.getText();
 		
@@ -53,12 +63,20 @@ public class TextInterface{
 	}
 	
 	public int nextInt() {
-		while(!moveOn) {
-			moveOn = getMoveOn();
+		
+		if (!hasNextInt) {
+			synchronized (sync) {
+				try {
+					sync.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
-		moveOn = false;
-
+		hasNextInt = false;
+		
 		String answer = myTextField.getText();
 		
 		myPanel.writeToScreen(answer + "\n");
@@ -68,9 +86,17 @@ public class TextInterface{
 	}
 	
 	public boolean hasNextInt() {
-		while(!moveOn) {
-			moveOn = getMoveOn();
+		
+		synchronized (sync) {
+			try {
+				sync.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		hasNextInt = true;
 		
 		boolean answer = true;
 		
@@ -83,19 +109,8 @@ public class TextInterface{
 		return answer;
 	}
 	
-	public boolean getMoveOn() {
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return moveOn;
-	}
-	
 	public void setPanel(GraphicsPanel thePanel) {
 		myPanel = thePanel;
 	}
-
 
 }

@@ -4,12 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,9 +17,10 @@ public class ReadWriteShowdown {
 	ReadWrite kleb = new ReadWrite("Stats.txt");
 	String [] allNames = kleb.getAllNames();
 	String [] allMoves = new String[397];
-	String [] allDamage = new String[397];
-	String [] allMoveTypes = new String[397];
+	HashMap <String, String> allDamage = new HashMap <String, String>();
+	HashMap <String, String> allMoveTypes = new HashMap <String, String>();
 	HashMap <String, String[]> taggedLearnsets = new HashMap <String, String[]>();
+	HashMap <String, String> taggedStats = new HashMap <String, String>();
 	
 	public ReadWriteShowdown(String readURL, String writeURL, boolean overwrite) {
 		url = readURL;
@@ -42,6 +38,7 @@ public class ReadWriteShowdown {
 		
 		setAllMoves();
 		setAllLearnsets();
+		setAllStats();
 		
 	}
 	
@@ -51,9 +48,67 @@ public class ReadWriteShowdown {
 		
 	}
 	
+	public String getPokemonDataLine(String text) {
+		
+		String moves = "";
+		String temp[] = text.split("\n");
+		int i = 0;
+		
+		try {
+			
+			for (i = 1; i < 5; i ++) {
+				
+				moves += temp[i] + ";" + allMoveTypes.get(temp[i]) + ";" + allDamage.get(temp[i]) + ";";
+				
+			}
+			
+		} catch(ArrayIndexOutOfBoundsException e) {
+			
+			while (i < 5) {
+				
+				for (int k = 0; k < 3; k ++) {
+					
+					moves += "NA;";
+					
+				}
+				
+			}
+			
+		}
+		
+		return taggedStats.get(temp[0]) + moves;
+		
+	}
+	
 	public HashMap <String, String[]> getAllTaggedLearnsets() {
 		
 		return taggedLearnsets;
+		
+	}
+	
+	private void setAllStats() {
+		
+		try {
+
+			Scanner myobj = new Scanner(new File("StatTemplate.txt"));
+			String line = "";
+
+			while (myobj.hasNextLine()) {
+				
+				line = myobj.nextLine();
+				String temp[] = line.split(";");
+
+				taggedStats.put(temp[1], line);
+				
+			}
+			
+			myobj.close();
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+
+		}
 		
 	}
 	
@@ -69,7 +124,7 @@ public class ReadWriteShowdown {
 
 		for (int i = 0; i < allMoves.length; i++) {
 
-			writer.println(allMoves[i] + ";" + allMoveTypes[i] + ";" + allDamage[i] + ";");
+			writer.println(allMoves[i] + ";" + allMoveTypes.get(allMoves[i]) + ";" + allDamage.get(allMoves[i]) + ";");
 
 		}
 		
@@ -129,6 +184,8 @@ public class ReadWriteShowdown {
 
 				taggedLearnsets.put(line.split(";")[0], temp);
 			}
+			
+			myobj.close();
 
 		} catch (FileNotFoundException e) {
 
@@ -151,12 +208,14 @@ public class ReadWriteShowdown {
 				String temp[] = line.split(";");
 
 				allMoves[count] = temp[0];
-				allMoveTypes[count] = temp[1];
-				allDamage[count] = temp[2];
+				allMoveTypes.put(allMoves[count], temp[1]);
+				allDamage.put(allMoves[count], temp[2]);
 
 				count++;
 
 			}
+			
+			myobj.close();
 
 		} catch (FileNotFoundException e) {
 
